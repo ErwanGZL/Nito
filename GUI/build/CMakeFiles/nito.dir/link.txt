@@ -1,0 +1,1 @@
+/usr/bin/c++  -std=c++11 -pthread -O3 -g3 -rdynamic CMakeFiles/nito.dir/main.cpp.o CMakeFiles/nito.dir/Gfx/Gfx.cpp.o CMakeFiles/nito.dir/Net/Network.cpp.o -o nito  /usr/lib/libsfml-graphics.so.2.6.0 /usr/lib/libsfml-window.so.2.6.0 /usr/lib/libsfml-audio.so.2.6.0 /usr/lib/libsfml-network.so.2.6.0 /usr/lib/libsfml-system.so.2.6.0 
