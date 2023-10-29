@@ -1,0 +1,7 @@
+[remote]
+address = "127.0.0.1"
+port = "8080"
+
+[world]
+x = 200
+y = 100

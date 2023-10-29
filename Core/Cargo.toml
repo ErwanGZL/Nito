@@ -4,8 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-name="core"
-path="src/core/lib.rs"
+name = "nito"
+path = "src/core/lib.rs"
 
 [[bin]]
-name="client"
+name = "client"
+
+[dependencies]
+toml = "0.8.6"
+serde = { version = "1.0.190", features = ["derive"] }
