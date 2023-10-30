@@ -1,22 +1,24 @@
 use std::fs;
-use toml;
+
 use serde::Deserialize;
+use toml;
 
 #[derive(Debug, Deserialize)]
 pub struct Remote {
-    address: String,
-    port: String,
+    pub address: String,
+    pub port: String,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct World {
-    x: u32,
-    y: u32,
+    pub x: u32,
+    pub y: u32,
 }
+
 #[derive(Debug, Deserialize)]
 pub struct Config {
-    remote: Remote,
-    world: World,
+    pub remote: Remote,
+    pub world: World,
 }
 
 pub fn open_config() -> Config {
