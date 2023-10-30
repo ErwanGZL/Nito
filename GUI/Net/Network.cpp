@@ -44,18 +44,18 @@ int Network::getMessage()
 
 void Network::run()
 {
-    _socket = socket(PF_INET, SOCK_STREAM, 0);
-    if (_socket == -1) {
-        perror("socket");
-        return;
-    }
-    _addr.sin_family = AF_INET;
-    _addr.sin_port = htons(_data->getPort());
-    _addr.sin_addr.s_addr = inet_addr(_data->getMachine().c_str());
-    if (::connect(_socket, (struct sockaddr *)&_addr, sizeof(_addr)) == -1) {
-        perror("connect");
-        return;
-    }
+    // _socket = socket(PF_INET, SOCK_STREAM, 0);
+    // if (_socket == -1) {
+    //     perror("socket");
+    //     return;
+    // }
+    // _addr.sin_family = AF_INET;
+    // _addr.sin_port = htons(_data->getPort());
+    // _addr.sin_addr.s_addr = inet_addr(_data->getMachine().c_str());
+    // if (::connect(_socket, (struct sockaddr *)&_addr, sizeof(_addr)) == -1) {
+    //     perror("connect");
+    //     return;
+    // }
     while (1) {
         if (handleMessages()) return;
     }

@@ -129,6 +129,30 @@ nito/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/build
 .PHONY : nito/fast
 
+Gfx/CellMap.o: Gfx/CellMap.cpp.o
+.PHONY : Gfx/CellMap.o
+
+# target to build an object file
+Gfx/CellMap.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/Gfx/CellMap.cpp.o
+.PHONY : Gfx/CellMap.cpp.o
+
+Gfx/CellMap.i: Gfx/CellMap.cpp.i
+.PHONY : Gfx/CellMap.i
+
+# target to preprocess a source file
+Gfx/CellMap.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/Gfx/CellMap.cpp.i
+.PHONY : Gfx/CellMap.cpp.i
+
+Gfx/CellMap.s: Gfx/CellMap.cpp.s
+.PHONY : Gfx/CellMap.s
+
+# target to generate assembly for a file
+Gfx/CellMap.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/Gfx/CellMap.cpp.s
+.PHONY : Gfx/CellMap.cpp.s
+
 Gfx/Gfx.o: Gfx/Gfx.cpp.o
 .PHONY : Gfx/Gfx.o
 
@@ -152,6 +176,30 @@ Gfx/Gfx.s: Gfx/Gfx.cpp.s
 Gfx/Gfx.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/Gfx/Gfx.cpp.s
 .PHONY : Gfx/Gfx.cpp.s
+
+Gfx/Ui.o: Gfx/Ui.cpp.o
+.PHONY : Gfx/Ui.o
+
+# target to build an object file
+Gfx/Ui.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/Gfx/Ui.cpp.o
+.PHONY : Gfx/Ui.cpp.o
+
+Gfx/Ui.i: Gfx/Ui.cpp.i
+.PHONY : Gfx/Ui.i
+
+# target to preprocess a source file
+Gfx/Ui.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/Gfx/Ui.cpp.i
+.PHONY : Gfx/Ui.cpp.i
+
+Gfx/Ui.s: Gfx/Ui.cpp.s
+.PHONY : Gfx/Ui.s
+
+# target to generate assembly for a file
+Gfx/Ui.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/Gfx/Ui.cpp.s
+.PHONY : Gfx/Ui.cpp.s
 
 Net/Network.o: Net/Network.cpp.o
 .PHONY : Net/Network.o
@@ -210,9 +258,15 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... nito"
+	@echo "... Gfx/CellMap.o"
+	@echo "... Gfx/CellMap.i"
+	@echo "... Gfx/CellMap.s"
 	@echo "... Gfx/Gfx.o"
 	@echo "... Gfx/Gfx.i"
 	@echo "... Gfx/Gfx.s"
+	@echo "... Gfx/Ui.o"
+	@echo "... Gfx/Ui.i"
+	@echo "... Gfx/Ui.s"
 	@echo "... Net/Network.o"
 	@echo "... Net/Network.i"
 	@echo "... Net/Network.s"

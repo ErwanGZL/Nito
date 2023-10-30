@@ -1,5 +1,7 @@
-CMakeFiles/nito.dir/main.cpp.o: /home/rclovis/Perso/Nito/GUI/main.cpp \
- /usr/include/stdc-predef.h /usr/include/c++/13.2.1/iostream \
+CMakeFiles/nito.dir/Gfx/Tools.cpp.o: \
+ /home/rclovis/Perso/Nito/GUI/Gfx/Tools.cpp /usr/include/stdc-predef.h \
+ /home/rclovis/Perso/Nito/GUI/Gfx/Tools.hpp \
+ /usr/include/c++/13.2.1/iostream \
  /usr/include/c++/13.2.1/bits/requires_hosted.h \
  /usr/include/c++/13.2.1/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/include/c++/13.2.1/x86_64-pc-linux-gnu/bits/os_defines.h \
@@ -126,39 +128,15 @@ CMakeFiles/nito.dir/main.cpp.o: /home/rclovis/Perso/Nito/GUI/main.cpp \
  /usr/include/c++/13.2.1/bits/locale_facets.tcc \
  /usr/include/c++/13.2.1/bits/basic_ios.tcc \
  /usr/include/c++/13.2.1/bits/ostream.tcc /usr/include/c++/13.2.1/istream \
- /usr/include/c++/13.2.1/bits/istream.tcc \
- /home/rclovis/Perso/Nito/GUI/Gfx/Gfx.hpp /usr/include/c++/13.2.1/vector \
+ /usr/include/c++/13.2.1/bits/istream.tcc /usr/include/c++/13.2.1/vector \
  /usr/include/c++/13.2.1/bits/stl_uninitialized.h \
  /usr/include/c++/13.2.1/bits/stl_vector.h \
  /usr/include/c++/13.2.1/bits/stl_bvector.h \
- /usr/include/c++/13.2.1/bits/vector.tcc /usr/include/c++/13.2.1/thread \
- /usr/include/c++/13.2.1/bits/std_thread.h /usr/include/c++/13.2.1/tuple \
- /usr/include/c++/13.2.1/bits/uses_allocator.h \
- /usr/include/c++/13.2.1/bits/unique_ptr.h \
- /usr/include/c++/13.2.1/bits/this_thread_sleep.h \
- /usr/include/c++/13.2.1/bits/chrono.h /usr/include/c++/13.2.1/ratio \
- /usr/include/c++/13.2.1/cstdint \
- /usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/include/stdint.h \
- /usr/include/stdint.h /usr/include/bits/stdint-uintn.h \
- /usr/include/c++/13.2.1/limits /usr/include/c++/13.2.1/ctime \
- /usr/include/c++/13.2.1/bits/parse_numbers.h \
- /usr/include/c++/13.2.1/memory \
- /usr/include/c++/13.2.1/bits/stl_tempbuf.h \
- /usr/include/c++/13.2.1/bits/stl_raw_storage_iter.h \
- /usr/include/c++/13.2.1/bits/align.h /usr/include/c++/13.2.1/bit \
- /usr/include/c++/13.2.1/bits/shared_ptr.h \
- /usr/include/c++/13.2.1/bits/shared_ptr_base.h \
- /usr/include/c++/13.2.1/bits/allocated_ptr.h \
- /usr/include/c++/13.2.1/ext/aligned_buffer.h \
- /usr/include/c++/13.2.1/ext/concurrence.h \
- /usr/include/c++/13.2.1/bits/shared_ptr_atomic.h \
- /usr/include/c++/13.2.1/bits/atomic_base.h \
- /usr/include/c++/13.2.1/bits/atomic_lockfree_defines.h \
- /usr/include/c++/13.2.1/backward/auto_ptr.h \
- /usr/include/SFML/Graphics.hpp /usr/include/SFML/Window.hpp \
- /usr/include/SFML/System.hpp /usr/include/SFML/Config.hpp \
- /usr/include/SFML/System/Clock.hpp /usr/include/SFML/System/Export.hpp \
- /usr/include/SFML/System/Time.hpp /usr/include/SFML/System/Err.hpp \
+ /usr/include/c++/13.2.1/bits/vector.tcc /usr/include/SFML/Graphics.hpp \
+ /usr/include/SFML/Window.hpp /usr/include/SFML/System.hpp \
+ /usr/include/SFML/Config.hpp /usr/include/SFML/System/Clock.hpp \
+ /usr/include/SFML/System/Export.hpp /usr/include/SFML/System/Time.hpp \
+ /usr/include/SFML/System/Err.hpp \
  /usr/include/SFML/System/FileInputStream.hpp \
  /usr/include/SFML/System/InputStream.hpp \
  /usr/include/SFML/System/NonCopyable.hpp \
@@ -171,8 +149,10 @@ CMakeFiles/nito.dir/main.cpp.o: /home/rclovis/Perso/Nito/GUI/main.cpp \
  /usr/include/c++/13.2.1/bits/algorithmfwd.h \
  /usr/include/c++/13.2.1/bits/stl_heap.h \
  /usr/include/c++/13.2.1/bits/uniform_int_dist.h \
+ /usr/include/c++/13.2.1/bits/stl_tempbuf.h \
  /usr/include/c++/13.2.1/locale \
  /usr/include/c++/13.2.1/bits/locale_facets_nonio.h \
+ /usr/include/c++/13.2.1/ctime \
  /usr/include/c++/13.2.1/x86_64-pc-linux-gnu/bits/time_members.h \
  /usr/include/c++/13.2.1/x86_64-pc-linux-gnu/bits/messages_members.h \
  /usr/include/libintl.h /usr/include/c++/13.2.1/bits/codecvt.h \
@@ -202,7 +182,10 @@ CMakeFiles/nito.dir/main.cpp.o: /home/rclovis/Perso/Nito/GUI/main.cpp \
  /usr/include/SFML/Window/WindowBase.hpp \
  /usr/include/SFML/Window/Vulkan.hpp \
  /usr/include/SFML/Window/WindowHandle.hpp \
- /usr/include/c++/13.2.1/cstddef /usr/include/SFML/Window/WindowStyle.hpp \
+ /usr/include/c++/13.2.1/cstddef \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/13.2.1/include/stdint.h \
+ /usr/include/stdint.h /usr/include/bits/stdint-uintn.h \
+ /usr/include/SFML/Window/WindowStyle.hpp \
  /usr/include/SFML/Graphics/BlendMode.hpp \
  /usr/include/SFML/Graphics/Export.hpp \
  /usr/include/SFML/Graphics/CircleShape.hpp \
@@ -221,7 +204,9 @@ CMakeFiles/nito.dir/main.cpp.o: /home/rclovis/Perso/Nito/GUI/main.cpp \
  /usr/include/SFML/Graphics/Texture.hpp \
  /usr/include/SFML/Graphics/Image.hpp /usr/include/c++/13.2.1/map \
  /usr/include/c++/13.2.1/bits/stl_tree.h \
- /usr/include/c++/13.2.1/bits/stl_map.h \
+ /usr/include/c++/13.2.1/ext/aligned_buffer.h \
+ /usr/include/c++/13.2.1/bits/stl_map.h /usr/include/c++/13.2.1/tuple \
+ /usr/include/c++/13.2.1/bits/uses_allocator.h \
  /usr/include/c++/13.2.1/bits/stl_multimap.h \
  /usr/include/c++/13.2.1/bits/erase_if.h \
  /usr/include/SFML/Graphics/RectangleShape.hpp \
@@ -235,33 +220,8 @@ CMakeFiles/nito.dir/main.cpp.o: /home/rclovis/Perso/Nito/GUI/main.cpp \
  /usr/include/SFML/Graphics/Text.hpp \
  /usr/include/SFML/Graphics/VertexBuffer.hpp \
  /home/rclovis/Perso/Nito/GUI/Data/Data.hpp /usr/include/c++/13.2.1/mutex \
+ /usr/include/c++/13.2.1/bits/chrono.h /usr/include/c++/13.2.1/ratio \
+ /usr/include/c++/13.2.1/cstdint /usr/include/c++/13.2.1/limits \
+ /usr/include/c++/13.2.1/bits/parse_numbers.h \
  /usr/include/c++/13.2.1/bits/std_mutex.h \
- /usr/include/c++/13.2.1/bits/unique_lock.h \
- /home/rclovis/Perso/Nito/GUI/Net/Network.hpp /usr/include/sys/socket.h \
- /usr/include/bits/types/struct_iovec.h /usr/include/bits/socket.h \
- /usr/include/bits/socket_type.h /usr/include/bits/sockaddr.h \
- /usr/include/asm/socket.h /usr/include/asm-generic/socket.h \
- /usr/include/linux/posix_types.h /usr/include/linux/stddef.h \
- /usr/include/asm/posix_types.h /usr/include/asm/posix_types_64.h \
- /usr/include/asm-generic/posix_types.h /usr/include/asm/bitsperlong.h \
- /usr/include/asm-generic/bitsperlong.h /usr/include/asm/sockios.h \
- /usr/include/asm-generic/sockios.h \
- /usr/include/bits/types/struct_osockaddr.h /usr/include/netinet/in.h \
- /usr/include/bits/in.h /usr/include/netinet/ip.h \
- /usr/include/arpa/inet.h /usr/include/unistd.h \
- /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
- /usr/include/bits/confname.h /usr/include/bits/getopt_posix.h \
- /usr/include/bits/getopt_core.h /usr/include/bits/unistd_ext.h \
- /usr/include/linux/close_range.h /usr/include/fcntl.h \
- /usr/include/bits/fcntl.h /usr/include/bits/fcntl-linux.h \
- /usr/include/linux/falloc.h /usr/include/bits/stat.h \
- /usr/include/bits/struct_stat.h /usr/include/c++/13.2.1/math.h \
- /usr/include/c++/13.2.1/cmath /usr/include/math.h \
- /usr/include/bits/math-vector.h /usr/include/bits/libm-simd-decl-stubs.h \
- /usr/include/bits/flt-eval-method.h /usr/include/bits/fp-logb.h \
- /usr/include/bits/fp-fast.h \
- /usr/include/bits/mathcalls-helper-functions.h \
- /usr/include/bits/mathcalls.h /usr/include/bits/mathcalls-narrow.h \
- /usr/include/bits/iscanonical.h /home/rclovis/Perso/Nito/GUI/Gfx/Ui.hpp \
- /home/rclovis/Perso/Nito/GUI/Gfx/tool.hpp \
- /home/rclovis/Perso/Nito/GUI/Gfx/CellMap.hpp
+ /usr/include/c++/13.2.1/bits/unique_lock.h

@@ -97,10 +97,38 @@ CMakeFiles/nito.dir/Gfx/Gfx.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/nito.dir/Gfx/Gfx.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rclovis/Perso/Nito/GUI/Gfx/Gfx.cpp -o CMakeFiles/nito.dir/Gfx/Gfx.cpp.s
 
+CMakeFiles/nito.dir/Gfx/Ui.cpp.o: CMakeFiles/nito.dir/flags.make
+CMakeFiles/nito.dir/Gfx/Ui.cpp.o: /home/rclovis/Perso/Nito/GUI/Gfx/Ui.cpp
+CMakeFiles/nito.dir/Gfx/Ui.cpp.o: CMakeFiles/nito.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rclovis/Perso/Nito/GUI/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/nito.dir/Gfx/Ui.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nito.dir/Gfx/Ui.cpp.o -MF CMakeFiles/nito.dir/Gfx/Ui.cpp.o.d -o CMakeFiles/nito.dir/Gfx/Ui.cpp.o -c /home/rclovis/Perso/Nito/GUI/Gfx/Ui.cpp
+
+CMakeFiles/nito.dir/Gfx/Ui.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/nito.dir/Gfx/Ui.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/rclovis/Perso/Nito/GUI/Gfx/Ui.cpp > CMakeFiles/nito.dir/Gfx/Ui.cpp.i
+
+CMakeFiles/nito.dir/Gfx/Ui.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/nito.dir/Gfx/Ui.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rclovis/Perso/Nito/GUI/Gfx/Ui.cpp -o CMakeFiles/nito.dir/Gfx/Ui.cpp.s
+
+CMakeFiles/nito.dir/Gfx/CellMap.cpp.o: CMakeFiles/nito.dir/flags.make
+CMakeFiles/nito.dir/Gfx/CellMap.cpp.o: /home/rclovis/Perso/Nito/GUI/Gfx/CellMap.cpp
+CMakeFiles/nito.dir/Gfx/CellMap.cpp.o: CMakeFiles/nito.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rclovis/Perso/Nito/GUI/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/nito.dir/Gfx/CellMap.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nito.dir/Gfx/CellMap.cpp.o -MF CMakeFiles/nito.dir/Gfx/CellMap.cpp.o.d -o CMakeFiles/nito.dir/Gfx/CellMap.cpp.o -c /home/rclovis/Perso/Nito/GUI/Gfx/CellMap.cpp
+
+CMakeFiles/nito.dir/Gfx/CellMap.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/nito.dir/Gfx/CellMap.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/rclovis/Perso/Nito/GUI/Gfx/CellMap.cpp > CMakeFiles/nito.dir/Gfx/CellMap.cpp.i
+
+CMakeFiles/nito.dir/Gfx/CellMap.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/nito.dir/Gfx/CellMap.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rclovis/Perso/Nito/GUI/Gfx/CellMap.cpp -o CMakeFiles/nito.dir/Gfx/CellMap.cpp.s
+
 CMakeFiles/nito.dir/Net/Network.cpp.o: CMakeFiles/nito.dir/flags.make
 CMakeFiles/nito.dir/Net/Network.cpp.o: /home/rclovis/Perso/Nito/GUI/Net/Network.cpp
 CMakeFiles/nito.dir/Net/Network.cpp.o: CMakeFiles/nito.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rclovis/Perso/Nito/GUI/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/nito.dir/Net/Network.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/rclovis/Perso/Nito/GUI/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/nito.dir/Net/Network.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/nito.dir/Net/Network.cpp.o -MF CMakeFiles/nito.dir/Net/Network.cpp.o.d -o CMakeFiles/nito.dir/Net/Network.cpp.o -c /home/rclovis/Perso/Nito/GUI/Net/Network.cpp
 
 CMakeFiles/nito.dir/Net/Network.cpp.i: cmake_force
@@ -115,6 +143,8 @@ CMakeFiles/nito.dir/Net/Network.cpp.s: cmake_force
 nito_OBJECTS = \
 "CMakeFiles/nito.dir/main.cpp.o" \
 "CMakeFiles/nito.dir/Gfx/Gfx.cpp.o" \
+"CMakeFiles/nito.dir/Gfx/Ui.cpp.o" \
+"CMakeFiles/nito.dir/Gfx/CellMap.cpp.o" \
 "CMakeFiles/nito.dir/Net/Network.cpp.o"
 
 # External object files for target nito
@@ -122,6 +152,8 @@ nito_EXTERNAL_OBJECTS =
 
 nito: CMakeFiles/nito.dir/main.cpp.o
 nito: CMakeFiles/nito.dir/Gfx/Gfx.cpp.o
+nito: CMakeFiles/nito.dir/Gfx/Ui.cpp.o
+nito: CMakeFiles/nito.dir/Gfx/CellMap.cpp.o
 nito: CMakeFiles/nito.dir/Net/Network.cpp.o
 nito: CMakeFiles/nito.dir/build.make
 nito: /usr/lib/libsfml-graphics.so.2.6.0
@@ -130,7 +162,7 @@ nito: /usr/lib/libsfml-audio.so.2.6.0
 nito: /usr/lib/libsfml-network.so.2.6.0
 nito: /usr/lib/libsfml-system.so.2.6.0
 nito: CMakeFiles/nito.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/rclovis/Perso/Nito/GUI/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable nito"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/rclovis/Perso/Nito/GUI/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable nito"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/nito.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

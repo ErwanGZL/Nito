@@ -1,7 +1,7 @@
 #pragma once
 #include <mutex>
 #include <vector>
-#include <vector>
+#include <string>
 
 class Data {
     public:
@@ -9,7 +9,7 @@ class Data {
         ~Data() = default;
         void lock() { _mutex.lock();}
         void unLock() { _mutex.unlock();}
-        void setCell(int x, int y, uint8_t value) { _map[x][y] = value;}
+        void setCell(uint16_t x, uint16_t y, uint8_t value) { _map[x][y] = value;}
         void setPort(int port) { _port = port;}
         void setMachine(std::string machine) { _machine = machine;}
         int getPort() { return _port;}
@@ -17,11 +17,11 @@ class Data {
         bool isRunning() { return _isRunning;}
         void setRunning(bool isRunning) { _isRunning = isRunning;}
         std::vector<std::vector<uint8_t>> getMap() { return _map;}
-        int getCell(int x, int y) { return _map[x][y];}
-        int getWidth() { return _width;}
-        int getHeight() { return _height;}
+        uint8_t getCell(uint16_t x, uint16_t y) { return _map[x][y];}
+        uint16_t getWidth() { return _width;}
+        uint16_t getHeight() { return _height;}
 
-        void setWidthHeight(int width, int height) {
+        void setWidthHeight(uint16_t width, uint16_t height) {
             if (_width != width) {
                 _width = width;
                 _height = height;
@@ -42,11 +42,10 @@ class Data {
     protected:
     private:
         std::mutex _mutex;
-        int _width = 100;
-        int _height = 100;
+        uint16_t _width = 100;
+        uint16_t _height = 100;
         int _port = 4242;
         std::string _machine = "127.0.0.1";
         std::vector<std::vector<uint8_t>> _map = std::vector<std::vector<uint8_t>>(_width, std::vector<uint8_t>(_height, 0));
         bool _isRunning = true;
-
 };

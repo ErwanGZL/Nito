@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/nito.dir/Gfx/CellMap.cpp.o"
+  "CMakeFiles/nito.dir/Gfx/CellMap.cpp.o.d"
   "CMakeFiles/nito.dir/Gfx/Gfx.cpp.o"
   "CMakeFiles/nito.dir/Gfx/Gfx.cpp.o.d"
+  "CMakeFiles/nito.dir/Gfx/Ui.cpp.o"
+  "CMakeFiles/nito.dir/Gfx/Ui.cpp.o.d"
   "CMakeFiles/nito.dir/Net/Network.cpp.o"
   "CMakeFiles/nito.dir/Net/Network.cpp.o.d"
   "CMakeFiles/nito.dir/main.cpp.o"
