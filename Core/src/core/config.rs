@@ -4,7 +4,7 @@ use serde::Deserialize;
 use toml;
 
 #[derive(Debug, Deserialize)]
-pub struct Remote {
+pub struct Endpoint {
     pub address: String,
     pub port: String,
 }
@@ -13,16 +13,17 @@ pub struct Remote {
 pub struct World {
     pub x: u32,
     pub y: u32,
+    pub frequency: u32,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Config {
-    pub remote: Remote,
+    pub endpoint: Endpoint,
     pub world: World,
 }
 
 pub fn open_config() -> Config {
-    let mut config_file = fs::read_to_string("config/config.toml").unwrap();
+    let config_file = fs::read_to_string("config/config.toml").unwrap();
     let config: Config = toml::from_str(&config_file).unwrap();
     config
 }

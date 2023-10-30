@@ -8,7 +8,7 @@ name = "nito"
 path = "src/core/lib.rs"
 
 [[bin]]
-name = "client"
+name = "server"
 
 [dependencies]
 toml = "0.8.6"
