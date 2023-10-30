@@ -17,6 +17,8 @@ set(
     SOURCES
     main.cpp
     Gfx/Gfx.cpp
+    Gfx/Ui.cpp
+    Gfx/CellMap.cpp
     Net/Network.cpp
 )
 

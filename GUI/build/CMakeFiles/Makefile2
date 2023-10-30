@@ -81,12 +81,12 @@ clean: CMakeFiles/nito.dir/clean
 CMakeFiles/nito.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/nito.dir/build.make CMakeFiles/nito.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/rclovis/Perso/Nito/GUI/build/CMakeFiles --progress-num=1,2,3,4 "Built target nito"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/rclovis/Perso/Nito/GUI/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target nito"
 .PHONY : CMakeFiles/nito.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/nito.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rclovis/Perso/Nito/GUI/build/CMakeFiles 4
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rclovis/Perso/Nito/GUI/build/CMakeFiles 6
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/nito.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/rclovis/Perso/Nito/GUI/build/CMakeFiles 0
 .PHONY : CMakeFiles/nito.dir/rule

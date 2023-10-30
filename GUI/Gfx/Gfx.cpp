@@ -5,6 +5,12 @@ Gfx::Gfx()
     _data = new Data();
     _window.create(sf::VideoMode(800, 600), "Nito");
     _window.setFramerateLimit(60);
+    _tools = std::unique_ptr<Ui>(new Ui(&_window, _data, &_tool));
+    _cellMap = std::unique_ptr<CellMap>(new CellMap(&_window, _data, &_tool));
+
+    _tool.shape = toolShape::CIRCLE;
+    _tool.type = toolType::BRUSH;
+    _tool.size = 5;
 }
 
 Gfx::~Gfx()
@@ -17,25 +23,32 @@ Gfx::~Gfx()
 void Gfx::run ()
 {
     _data->setPort(4242);
-    _data->setMachine("127.0.0.1");
+    _data->setMachine("10.79.216.40");
     _thread = std::thread(threadNet, _data);
     while (_data->isRunning()) {
         _data->lock();
         while (_window.pollEvent(_event)) {
-            if (_event.type == sf::Event::Closed)
-                _data->setRunning(false);
+            event();
         }
-        int d = std::min(_window.getSize().x / _data->getWidth(), _window.getSize().y / _data->getHeight());
-        _rect.setSize(sf::Vector2f(d, d));
-        for (int i = 0; i < _data->getWidth(); i++) {
-            for (int j = 0; j < _data->getHeight(); j++) {
-                if (_data->getCell(i, j) == 0) continue;
-                _rect.setPosition(i * d, j * d);
-                _rect.setFillColor(getColor(_data->getCell(i, j)));
-                _window.draw(_rect);
-            }
-        }
+        draw();
         _data->unLock();
+        usleep(1000);
+    }
+}
+
+void Gfx::draw()
+{
+    _window.clear();
+    _tools->draw();
+    _cellMap->draw();
+    _window.display();
+}
+
+void Gfx::event()
+{
+    if (_event.type == sf::Event::Closed) {
+        _data->setRunning(false);
+        _window.close();
     }
 }
 
