@@ -1,4 +1,5 @@
 use mpsc::channel;
+use serde::de::Expected;
 use std::time::Instant;
 use std::{
     io::{Read, Write},
@@ -62,21 +63,27 @@ fn dispatcher_logic(
     clients: Arc<Mutex<Vec<TcpStream>>>,
 ) {
     println!("Dispatcher thread started!");
+    let mut disconnects = vec![];
     loop {
         let msg = receiver.recv().unwrap();
         if msg {
             let mut clients = clients.lock().unwrap();
             let dump = dump.lock().unwrap();
+            let mut i = 0;
             for con in clients.iter_mut() {
                 match con.write(dump.as_slice()) {
-                    Ok(_size) => {
-                        // println!("Sent dump")
+                    Ok(_) => {
                     }
-                    Err(e) => {
-                        eprintln!("Error writing to client: {}", e);
+                    Err(_) => {
+                        disconnects.push(i);
                     }
                 }
+                i += 1;
             }
+            for i in disconnects.iter().rev() {
+                clients.remove(*i);
+            }
+            disconnects.clear();
         }
     }
 }
