@@ -29,10 +29,7 @@ int Network::getMessage()
     _tv.tv_sec = 1;
     _tv.tv_usec = 0;
     int retval = select(_socket + 1, &_readfds, NULL, NULL, &_tv);
-    if (retval == -1) {
-        perror("select()");
-        return -1;
-    } else if (retval == 0) {
+    if (retval == -1 || retval == 0) {
         return -1;
     }
     size_t size = read(_socket, &_header, sizeof(_header));
@@ -44,18 +41,6 @@ int Network::getMessage()
 
 void Network::run()
 {
-    // _socket = socket(PF_INET, SOCK_STREAM, 0);
-    // if (_socket == -1) {
-    //     perror("socket");
-    //     return;
-    // }
-    // _addr.sin_family = AF_INET;
-    // _addr.sin_port = htons(_data->getPort());
-    // _addr.sin_addr.s_addr = inet_addr(_data->getMachine().c_str());
-    // if (::connect(_socket, (struct sockaddr *)&_addr, sizeof(_addr)) == -1) {
-    //     perror("connect");
-    //     return;
-    // }
     while (1) {
         if (handleMessages()) return;
     }
@@ -66,6 +51,10 @@ int Network::handleMessages()
     if (getMessage() == -1)
         return 1;
     _data->lock();
+    if (_data->isRunning() == false) {
+        _data->unLock();
+        return 1;
+    }
     _data->wipe();
     _data->setWidthHeight(_header.x, _header.y);
     for (int i = 0; i < _header.size; i++) {

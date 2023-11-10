@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <memory>
+#include <map>
 
 enum toolShape {
     CIRCLE,

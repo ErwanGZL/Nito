@@ -12,9 +12,10 @@
 
 class Ui {
     public:
-        Ui(sf::RenderWindow *window, Data *data, tool *Tool);
+        Ui(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors);
         ~Ui();
         void draw();
+        void event(sf::Event *event);
 
     protected:
     private:
@@ -22,8 +23,9 @@ class Ui {
         sf::RenderWindow *_window;
         sf::RectangleShape _hover;
         sf::RectangleShape _selected;
-        sf::RectangleShape _background;
         sf::RectangleShape _frame;
+        std::vector<sf::RectangleShape> _toolIcon;
 
         tool *_tool;
+        std::map<uint8_t, sf::Color> *_colors;
 };

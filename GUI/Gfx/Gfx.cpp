@@ -5,8 +5,8 @@ Gfx::Gfx()
     _data = new Data();
     _window.create(sf::VideoMode(800, 600), "Nito");
     _window.setFramerateLimit(60);
-    _tools = std::unique_ptr<Ui>(new Ui(&_window, _data, &_tool));
-    _cellMap = std::unique_ptr<CellMap>(new CellMap(&_window, _data, &_tool));
+    _tools = std::unique_ptr<Ui>(new Ui(&_window, _data, &_tool, &_colors));
+    _cellMap = std::unique_ptr<CellMap>(new CellMap(&_window, _data, &_tool, &_colors));
 
     _tool.shape = toolShape::CIRCLE;
     _tool.type = toolType::BRUSH;
@@ -23,12 +23,13 @@ Gfx::~Gfx()
 void Gfx::run ()
 {
     _data->setPort(4242);
-    _data->setMachine("10.79.216.40");
+    _data->setMachine("127.0.0.1");
     _thread = std::thread(threadNet, _data);
     while (_data->isRunning()) {
         _data->lock();
         while (_window.pollEvent(_event)) {
             event();
+            _tools->event(&_event);
         }
         draw();
         _data->unLock();

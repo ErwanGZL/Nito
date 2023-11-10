@@ -1,6 +1,6 @@
 #include "CellMap.hpp"
 
-CellMap::CellMap(sf::RenderWindow *window, Data *data, tool *Tool) : _data(data), _window(window), _tool(Tool)
+CellMap::CellMap(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors) : _data(data), _window(window), _tool(Tool), _colors(colors)
 {
     _frame.setFillColor(sf::Color::Transparent);
     _frame.setOutlineColor(sf::Color::White);
@@ -42,7 +42,7 @@ void CellMap::draw()
         for (uint32_t x = 0; x < _data->getWidth(); x++) {
             if (_data->getCell(x, y) == 0) continue;
             _rect.setPosition(startPos + sf::Vector2f(x * _rect.getSize().x, y * _rect.getSize().y));
-            _rect.setFillColor(getColor(_data->getCell(x, y)));
+            _rect.setFillColor(_colors->at(_data->getCell(x, y)));
             _window->draw(_rect);
         }
     }

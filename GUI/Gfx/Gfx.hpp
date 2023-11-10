@@ -34,4 +34,14 @@ class Gfx {
         std::unique_ptr<CellMap> _cellMap;
 
         tool _tool;
+        std::map<uint8_t, sf::Color> _colors = {
+            {0, sf::Color::Transparent},
+            {1, sf::Color::White},
+            {2, sf::Color::Red},
+            {3, sf::Color::Green},
+            {4, sf::Color::Blue},
+            {5, sf::Color::Yellow},
+            {6, sf::Color::Magenta},
+            {7, sf::Color::Cyan}
+        };
 };

@@ -70,7 +70,7 @@ fn dispatcher_logic(
             for con in clients.iter_mut() {
                 match con.write(dump.as_slice()) {
                     Ok(_size) => {
-                        println!("Sent dump")
+                        // println!("Sent dump")
                     }
                     Err(e) => {
                         eprintln!("Error writing to client: {}", e);
