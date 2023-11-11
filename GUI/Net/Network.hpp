@@ -35,7 +35,7 @@ class Network {
         void run();
         int getMessage();
         int handleMessages();
-        void sendCommand(std::string command);
+        void sendCell(uint16_t x, uint16_t y, uint8_t value);
 
     private:
         int _socket;

@@ -9,10 +9,11 @@
 
 #include "Data.hpp"
 #include "tool.hpp"
+#include "Network.hpp"
 
 class Ui {
     public:
-        Ui(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors);
+        Ui(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors, Network *network);
         ~Ui();
         void draw();
         void event(sf::Event *event);
@@ -25,6 +26,7 @@ class Ui {
         sf::RectangleShape _selected;
         sf::RectangleShape _frame;
         std::vector<sf::RectangleShape> _toolIcon;
+        Network *_network;
 
         tool *_tool;
         std::map<uint8_t, sf::Color> *_colors;

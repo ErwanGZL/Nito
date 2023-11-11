@@ -1,6 +1,6 @@
 #include "Ui.hpp"
 
-Ui::Ui(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors) : _window(window), _data(data), _tool(Tool), _colors(colors)
+Ui::Ui(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors, Network *network) : _data(data), _window(window), _tool(Tool), _colors(colors), _network(network)
 {
     _frame.setFillColor(sf::Color::Transparent);
     _frame.setOutlineColor(sf::Color::White);
@@ -56,6 +56,7 @@ void Ui::event(sf::Event *event)
             for (uint8_t i = 0; i < _colors->size() - 1; i++) {
                 if (_toolIcon[i].getGlobalBounds().contains(mousePos)) {
                     _selected.setPosition(_toolIcon[i].getPosition());
+                    _tool->color = i + 1;
                     return;
                 }
             }

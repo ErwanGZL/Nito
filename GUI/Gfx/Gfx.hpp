@@ -32,6 +32,7 @@ class Gfx {
         sf::Event _event;
         std::unique_ptr<Ui> _tools;
         std::unique_ptr<CellMap> _cellMap;
+        Network *_network;
 
         tool _tool;
         std::map<uint8_t, sf::Color> _colors = {

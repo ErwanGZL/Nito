@@ -64,8 +64,8 @@ int Network::handleMessages()
     return 0;
 }
 
-void Network::sendCommand(std::string command)
+void Network::sendCell(uint16_t x, uint16_t y, uint8_t value)
 {
-    command += "\n";
-    send(_socket, command.c_str(), command.size(), 0);
+    cell cell = {x, y, value};
+    send(_socket, &cell, sizeof(cell), 0);
 }
