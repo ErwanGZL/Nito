@@ -34,7 +34,17 @@ int Network::getMessage()
     }
     size_t size = read(_socket, &_header, sizeof(_header));
     if (size == 0) return -1;
-    size = read(_socket, _buffer.data(), _header.size * sizeof(cell));
+    if (_header.size == 0) return 0;
+    std::cout << "Received " << _header.size << " cells" << std::endl;
+    _buffer.clear();
+    std::vector<uint8_t> buffer(_header.size * 5);
+    size = read(_socket, buffer.data(), _header.size * 5);
+    for (int i = 0; i < _header.size; i++) {
+        uint16_t x = buffer[i * 5 + 1] << 8 | buffer[i * 5];
+        uint16_t y = buffer[i * 5 + 3] << 8 | buffer[i * 5 + 2];
+        uint8_t value = buffer[i * 5 + 4];
+        _buffer.push_back({x, y, value});
+    }
     if (size == 0) return -1;
     return 0;
 }
@@ -64,8 +74,18 @@ int Network::handleMessages()
     return 0;
 }
 
-void Network::sendCell(uint16_t x, uint16_t y, uint8_t value)
+void Network::sendCells(std::vector<cell> cells)
 {
-    cell cell = {x, y, value};
-    send(_socket, &cell, sizeof(cell), 0);
+    uint8_t size = cells.size();
+    if (size == 0) return;
+    send(_socket, &size, sizeof(uint8_t), 0);
+    std::vector<uint8_t> buffer(size * 5);
+    for (int i = 0; i < size; i++) {
+        buffer[i * 5] = cells[i].x & 0xFF;
+        buffer[i * 5 + 1] = (cells[i].x >> 8) & 0xFF;
+        buffer[i * 5 + 2] = cells[i].y & 0xFF;
+        buffer[i * 5 + 3] = (cells[i].y >> 8) & 0xFF;
+        buffer[i * 5 + 4] = cells[i].value;
+    }
+    send(_socket, buffer.data(), size * 5, 0);
 }

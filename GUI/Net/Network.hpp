@@ -35,7 +35,7 @@ class Network {
         void run();
         int getMessage();
         int handleMessages();
-        void sendCell(uint16_t x, uint16_t y, uint8_t value);
+        void sendCells(std::vector<cell> cells);
 
     private:
         int _socket;

@@ -8,7 +8,9 @@ Ui::Ui(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::C
     _selected.setFillColor(sf::Color::Transparent);
     _selected.setOutlineColor(sf::Color::Black);
     _selected.setOutlineThickness(2);
+    _selected.setPosition(sf::Vector2f(-100, -100));
     _hover.setFillColor(sf::Color(255, 255, 255, 100));
+    _hover.setPosition(sf::Vector2f(-100, -100));
 }
 
 Ui::~Ui()
@@ -69,6 +71,10 @@ void Ui::event(sf::Event *event)
                 _hover.setPosition(_toolIcon[i].getPosition());
                 return;
             }
+        }
+        if (!_frame.getGlobalBounds().contains(mousePos)) {
+            _hover.setPosition(sf::Vector2f(-100, -100));
+            return;
         }
     }
 }

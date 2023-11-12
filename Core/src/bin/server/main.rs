@@ -1,4 +1,5 @@
 use mpsc::channel;
+use nito::simulation;
 use serde::de::Expected;
 use std::time::Instant;
 use std::{
@@ -9,21 +10,69 @@ use std::{
     time::Duration,
 };
 
+struct NewCell {
+    x: u16,
+    y: u16,
+    value: u8,
+}
+
 use nito::{config::open_config, simulation::Simulation};
 
-fn handle_connection(mut stream: TcpStream) {
-    let mut buffer = [0; 1024];
+fn handle_connection(
+    sim: Arc<Mutex<Simulation>>,
+    mut stream: TcpStream,
+) {
+    let mut buffer: [u8; 2048] = [0; 2048];
+    let mut size: [u8; 1] = [0; 1];
+    let mut cell = NewCell {
+        x: 0,
+        y: 0,
+        value: 0,
+    };
     loop {
-        let data = stream.read(&mut buffer);
+        let data = stream.read(&mut size);
         match data {
-            Ok(size) => {
-                if size == 0 {
+            Ok(size_read) => {
+                if size_read == 0 {
                     break;
                 }
-                println!("Received: {:?}", &buffer[..size]);
             }
             Err(e) => {
                 eprintln!("Error: {}", e);
+            }
+        }
+        if size[0] == 0 {
+            break;
+        }
+        let data = stream.read(&mut buffer[0..(size[0] * 5) as usize]);
+        match data {
+            Ok(size_read) => {
+                if size_read == 0 {
+                    break;
+                }
+                for i in (0..(size[0] * 5) as usize).step_by(5) {
+                    cell.x = buffer[i + 0] as u16 + ((buffer[i + 1] as u16) << 8);
+                    cell.y = buffer[i + 2] as u16 + ((buffer[i + 3] as u16) << 8);
+                    cell.value = buffer[i + 4];
+                    match cell.value {
+                        0 => {
+                            sim.lock().unwrap().world[cell.y as usize][cell.x as usize] =
+                                nito::simulation::Element::Air;
+                        }
+                        1 => {
+                            sim.lock().unwrap().world[cell.y as usize][cell.x as usize] =
+                                nito::simulation::Element::Water;
+                        }
+                        2 => {
+                            sim.lock().unwrap().world[cell.y as usize][cell.x as usize] =
+                                nito::simulation::Element::Sand;
+                        }
+                        _ => {}
+                    }
+                }
+            }
+            Err(e) => {
+                eprintln!("Error_: {}", e);
             }
         }
     }
@@ -31,7 +80,7 @@ fn handle_connection(mut stream: TcpStream) {
 }
 
 fn sim_logic(
-    mut sim: Simulation,
+    sim: Arc<Mutex<Simulation>>,
     dump: Arc<Mutex<Vec<u8>>>,
     sender: mpsc::Sender<bool>,
     frequency: f64,
@@ -42,7 +91,7 @@ fn sim_logic(
     loop {
         {
             let mut dump = dump.lock().unwrap();
-            *dump = sim.dump();
+            *dump = sim.lock().unwrap().dump();
             sender.send(true).unwrap();
         }
         // Todo: read from inbox and update the sim
@@ -90,8 +139,14 @@ fn dispatcher_logic(
 
 fn main() -> std::io::Result<()> {
     let cfg = open_config();
-    let mut sim = Simulation::new(cfg.world.x as usize, cfg.world.y as usize);
-    sim.world[0][5] = nito::simulation::Element::Water;
+    // let mut sim: Simulation = Simulation::new(cfg.world.x as usize, cfg.world.y as usize);
+    let sim: Arc<Mutex<Simulation>> = Arc::new(Mutex::new(Simulation::new(
+        cfg.world.x as usize,
+        cfg.world.y as usize,
+    )));
+
+    // sim.lock().unwrap().world[0][5] = nito::simulation::Element::Water;
+
 
     let addr = format!("{}:{}", cfg.endpoint.address, cfg.endpoint.port);
     let listener = TcpListener::bind(addr).expect("Failed to bind to address");
@@ -104,8 +159,9 @@ fn main() -> std::io::Result<()> {
 
     // Simulation thread
     let dump_clone = Arc::clone(&dump);
+    let sim_clone = Arc::clone(&sim);
     let handle = thread::spawn(move || {
-        sim_logic(sim, dump_clone, sender, 1.0 / cfg.world.frequency as f64);
+        sim_logic(sim_clone, dump_clone, sender, 1.0 / cfg.world.frequency as f64);
     });
     handles.push(handle);
 
@@ -129,8 +185,10 @@ fn main() -> std::io::Result<()> {
                 clients.push(stream.try_clone().expect("Failed to clone connection"));
 
                 // On new connection spawn a thread
-                let handle = thread::spawn(|| {
-                    handle_connection(stream);
+                let clone_stream = stream.try_clone().expect("Failed to clone connection");
+                let sim_clone = Arc::clone(&sim);
+                let handle = thread::spawn(move || {
+                    handle_connection(sim_clone, clone_stream);
                 });
                 handles.push(handle);
             }

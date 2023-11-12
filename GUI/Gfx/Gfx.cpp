@@ -10,8 +10,6 @@ Gfx::Gfx()
     _window.setFramerateLimit(60);
     _tools = std::unique_ptr<Ui>(new Ui(&_window, _data, &_tool, &_colors, _network));
     _cellMap = std::unique_ptr<CellMap>(new CellMap(&_window, _data, &_tool, &_colors, _network));
-    _tool.shape = toolShape::CIRCLE;
-    _tool.type = toolType::BRUSH;
     _tool.size = 5;
 }
 
@@ -31,6 +29,7 @@ void Gfx::run ()
             event();
         }
         draw();
+        _cellMap->event(&_event);
         _data->unLock();
         usleep(1000);
     }
@@ -51,7 +50,6 @@ void Gfx::event()
         _window.close();
     }
     _tools->event(&_event);
-    _cellMap->event(&_event);
 }
 
 void *threadNet(void *arg)

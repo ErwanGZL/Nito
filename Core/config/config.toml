@@ -4,5 +4,5 @@ port = "4242"
 
 [world]
 x = 100
-y = 8
+y = 50
 frequency = 24

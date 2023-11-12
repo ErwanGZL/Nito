@@ -27,7 +27,6 @@ class Ui {
         sf::RectangleShape _frame;
         std::vector<sf::RectangleShape> _toolIcon;
         Network *_network;
-
         tool *_tool;
         std::map<uint8_t, sf::Color> *_colors;
 };
