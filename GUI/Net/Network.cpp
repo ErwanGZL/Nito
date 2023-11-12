@@ -26,26 +26,35 @@ int Network::getMessage()
 {
     FD_ZERO(&_readfds);
     FD_SET(_socket, &_readfds);
-    _tv.tv_sec = 1;
-    _tv.tv_usec = 0;
-    int retval = select(_socket + 1, &_readfds, NULL, NULL, &_tv);
+    int retval = select(_socket + 1, &_readfds, NULL, NULL, NULL);
     if (retval == -1 || retval == 0) {
         return -1;
     }
-    size_t size = read(_socket, &_header, sizeof(_header));
-    if (size == 0) return -1;
+
+    std::memset(&_header, 0, sizeof(_header));
+    ssize_t size = read(_socket, &_header, sizeof(_header));
+    if (size == -1 || size == 0) {
+        perror("read");
+        return -1;
+    }
+
+
     if (_header.size == 0) return 0;
     std::cout << "Received " << _header.size << " cells" << std::endl;
-    _buffer.clear();
-    std::vector<uint8_t> buffer(_header.size * 5);
-    size = read(_socket, buffer.data(), _header.size * 5);
-    for (int i = 0; i < _header.size; i++) {
-        uint16_t x = buffer[i * 5 + 1] << 8 | buffer[i * 5];
-        uint16_t y = buffer[i * 5 + 3] << 8 | buffer[i * 5 + 2];
-        uint8_t value = buffer[i * 5 + 4];
-        _buffer.push_back({x, y, value});
+
+
+    std::memset(_buffer, 0, sizeof(_buffer));
+    size = read(_socket, _buffer, _header.size * 5);
+    if (size != _header.size * 5) {
+        perror("read");
+        printf("size: %ld\n", size);
+        printf("header.size: %d\n", _header.size * 5);
+        return -1;
     }
-    if (size == 0) return -1;
+    if (size == -1 || size == 0) {
+        perror("read");
+        return -1;
+    }
     return 0;
 }
 
@@ -68,7 +77,10 @@ int Network::handleMessages()
     _data->wipe();
     _data->setWidthHeight(_header.x, _header.y);
     for (int i = 0; i < _header.size; i++) {
-        _data->setCell(_buffer[i].x, _buffer[i].y, _buffer[i].value);
+        uint16_t x = _buffer[i * 5 + 1] << 8 | _buffer[i * 5];
+        uint16_t y = _buffer[i * 5 + 3] << 8 | _buffer[i * 5 + 2];
+        uint8_t value = _buffer[i * 5 + 4];
+        _data->setCell(x, y, value);
     }
     _data->unLock();
     return 0;
@@ -76,9 +88,9 @@ int Network::handleMessages()
 
 void Network::sendCells(std::vector<cell> cells)
 {
-    uint8_t size = cells.size();
+    uint16_t size = cells.size();
     if (size == 0) return;
-    send(_socket, &size, sizeof(uint8_t), 0);
+    send(_socket, &size, sizeof(uint16_t), 0);
     std::vector<uint8_t> buffer(size * 5);
     for (int i = 0; i < size; i++) {
         buffer[i * 5] = cells[i].x & 0xFF;

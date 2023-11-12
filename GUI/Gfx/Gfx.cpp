@@ -31,7 +31,7 @@ void Gfx::run ()
         draw();
         _cellMap->event(&_event);
         _data->unLock();
-        usleep(1000);
+        usleep(10000);
     }
 }
 

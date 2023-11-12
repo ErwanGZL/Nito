@@ -23,7 +23,7 @@ fn handle_connection(
     mut stream: TcpStream,
 ) {
     let mut buffer: [u8; 2048] = [0; 2048];
-    let mut size: [u8; 1] = [0; 1];
+    let mut size: [u8; 2] = [0; 2];
     let mut cell = NewCell {
         x: 0,
         y: 0,
@@ -41,16 +41,17 @@ fn handle_connection(
                 eprintln!("Error: {}", e);
             }
         }
-        if size[0] == 0 {
+        let body_size = size[0] as u16 + ((size[1] as u16) << 8);
+        if body_size == 0 {
             break;
         }
-        let data = stream.read(&mut buffer[0..(size[0] * 5) as usize]);
+        let data = stream.read(&mut buffer[0..(body_size * 5) as usize]);
         match data {
             Ok(size_read) => {
                 if size_read == 0 {
                     break;
                 }
-                for i in (0..(size[0] * 5) as usize).step_by(5) {
+                for i in (0..(body_size * 5) as usize).step_by(5) {
                     cell.x = buffer[i + 0] as u16 + ((buffer[i + 1] as u16) << 8);
                     cell.y = buffer[i + 2] as u16 + ((buffer[i + 3] as u16) << 8);
                     cell.value = buffer[i + 4];

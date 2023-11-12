@@ -71,15 +71,8 @@ impl Simulation {
                 }
             }
         }
-        // print content of body
-        // for (i, byte) in body.iter().enumerate() {
-        //     if i % 5 == 0 {
-        //         println!();
-        //     }
-        //     print!("{:?} ", byte);
-        // }
-        println!("Body len: {}", body.len() / 5);
         data.extend(((body.len() / 5) as u32).to_le_bytes());
+        println!("Header: {:?}", data);
         data.extend(body);
         data
     }

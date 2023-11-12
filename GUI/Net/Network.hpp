@@ -12,6 +12,7 @@
 #include <pthread.h>
 #include <vector>
 #include <math.h>
+#include <cstring>
 #include "Data.hpp"
 
 struct header
@@ -44,7 +45,7 @@ class Network {
         Data *_data;
 
         header _header;
-        std::vector<cell> _buffer = std::vector<cell>(10000);
+        // std::vector<cell> _buffer = std::vector<cell>(10000);
+        uint8_t _buffer[100000];
         fd_set _readfds;
-        struct timeval _tv;
 };
