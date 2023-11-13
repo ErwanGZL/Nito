@@ -38,18 +38,13 @@ int Network::getMessage()
         return -1;
     }
 
-
     if (_header.size == 0) return 0;
     std::cout << "Received " << _header.size << " cells" << std::endl;
 
-
     std::memset(_buffer, 0, sizeof(_buffer));
     size = read(_socket, _buffer, _header.size * 5);
-    if (size != _header.size * 5) {
-        perror("read");
-        printf("size: %ld\n", size);
-        printf("header.size: %d\n", _header.size * 5);
-        return -1;
+    while (size != _header.size * 5) {
+        size += read(_socket, _buffer + size, _header.size * 5 - size);
     }
     if (size == -1 || size == 0) {
         perror("read");
