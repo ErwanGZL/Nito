@@ -47,7 +47,7 @@ impl Simulation {
         }
     }
     pub fn update(&mut self) {
-        let mut buffer = vec![vec![Element::Air; self.dimensions.x]; self.dimensions.y];
+        let buffer = vec![vec![Element::Air; self.dimensions.x]; self.dimensions.y];
         for (y, row) in self.world.iter().enumerate() {
             for (x, cell) in row.iter().enumerate() {}
         }
