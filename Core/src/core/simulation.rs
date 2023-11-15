@@ -1,16 +1,8 @@
 use std::fmt::{Display, Formatter};
 
-struct Vector2D<T> {
-    pub x: T,
-    pub y: T,
-}
-
-#[derive(Copy, Clone)]
-pub enum Element {
-    Air = 0,
-    Water = 1,
-    Sand = 2,
-}
+use crate::Element;
+use crate::Vector2D;
+use crate::{Action, Direction};
 
 pub struct Simulation {
     dimensions: Vector2D<usize>,
@@ -19,21 +11,11 @@ pub struct Simulation {
 
 impl Display for Simulation {
     fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
-        for row in &self.world {
-            for &cell in row {
-                match cell {
-                    Element::Air => {
-                        write!(f, "·").unwrap();
-                    }
-                    Element::Water => {
-                        write!(f, "~").unwrap();
-                    }
-                    Element::Sand => {
-                        write!(f, "¤").unwrap();
-                    }
-                }
+        for row in self.world.iter() {
+            for cell in row.iter() {
+                write!(f, "{}", cell)?;
             }
-            writeln!(f)?;
+            write!(f, "\n")?;
         }
         Ok(())
     }
@@ -47,12 +29,13 @@ impl Simulation {
         }
     }
     pub fn update(&mut self) {
-        let buffer = vec![vec![Element::Air; self.dimensions.x]; self.dimensions.y];
-        for (y, row) in self.world.iter().enumerate() {
-            for (x, cell) in row.iter().enumerate() {}
+        let buffer = self.world.clone();
+        for (y, row) in buffer.iter().enumerate().rev() {
+            for (x, cell) in row.iter().enumerate().rev() {
+                let action = cell.update(Vector2D { x, y }, &self);
+                self.apply_actions(action);
+            }
         }
-        self.world = buffer;
-        todo!();
     }
     pub fn dump(&self) -> Vec<u8> {
         let mut data: Vec<u8> = vec![];
@@ -72,8 +55,40 @@ impl Simulation {
             }
         }
         data.extend(((body.len() / 5) as u32).to_le_bytes());
-        println!("Header: {:?}", data);
         data.extend(body);
         data
+    }
+
+    fn in_bounds(&self, position: &Vector2D<usize>) -> bool {
+        position.x < self.dimensions.x && position.y < self.dimensions.y
+    }
+
+    pub fn at(
+        &self,
+        from: &Vector2D<usize>,
+        direction: Direction,
+    ) -> Option<(Element, Vector2D<usize>)> {
+        let factor = direction.factor();
+        let destination = Vector2D {
+            x: (from.x as isize + direction.distance() as isize * factor.x as isize) as usize,
+            y: (from.y as isize + direction.distance() as isize * factor.y as isize) as usize,
+        };
+        if !self.in_bounds(&from) || !self.in_bounds(&destination) {
+            return None;
+        }
+        Some((self.world[destination.y][destination.x], destination))
+    }
+
+    pub fn apply_actions(&mut self, action: Option<Action>) {
+        match action {
+            Some(Action::Swap(from, to)) => {
+                let temp = self.world[from.y][from.x];
+                self.world[from.y][from.x] = self.world[to.y][to.x];
+                self.world[to.y][to.x] = temp;
+            }
+            None => {
+                // println!("No action");
+            }
+        }
     }
 }

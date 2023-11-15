@@ -2,7 +2,7 @@ use std::sync::{mpsc, Arc, Mutex};
 use std::thread;
 use std::time::{Duration, Instant};
 
-use nito::simulation::Simulation;
+use nito::Simulation;
 
 pub fn simulation_logic(
     simulation: Arc<Mutex<Simulation>>,
@@ -19,8 +19,11 @@ pub fn simulation_logic(
             *dump = simulation.lock().unwrap().dump();
             sender.send(true).unwrap();
         }
-        // Todo: read from inbox and update the sim
-        // Todo: sim.update();
+
+        {
+            let mut simulation = simulation.lock().unwrap();
+            simulation.update();
+        }
 
         let now = Instant::now();
         let elapsed_time = now.duration_since(last_frame_time);

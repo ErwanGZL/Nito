@@ -1,10 +1,10 @@
+#[allow(dead_code, unused)]
 use std::net::TcpListener;
 use std::sync::mpsc::channel;
 use std::sync::{Arc, Mutex};
 use std::thread;
 
-use nito::config::open_config;
-use nito::simulation::Simulation;
+use nito::{open_config, Simulation};
 
 use crate::dispatcher_thread::dispatcher_logic;
 use crate::input_thread::handle_connection;

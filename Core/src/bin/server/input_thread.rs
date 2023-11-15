@@ -2,7 +2,7 @@ use std::io::Read;
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
 
-use nito::simulation::Simulation;
+use nito::{Element, Simulation};
 
 struct Cell {
     x: u16,
@@ -39,27 +39,27 @@ pub fn handle_connection(
             break;
         }
 
-        for i in (0..(cell_no as usize * 5)).step_by(5) {
-            let cell = Cell {
-                x: u16::from_le_bytes([body[i], body[i + 1]]),
-                y: u16::from_le_bytes([body[i + 2], body[i + 3]]),
-                value: body[i + 4],
-            };
-            // Todo: Optimize this match
-            match cell.value {
-                0 => {
-                    sim.lock().unwrap().world[cell.y as usize][cell.x as usize] =
-                        nito::simulation::Element::Air;
+        {
+            let mut sim = sim.lock().unwrap();
+            for i in (0..(cell_no as usize * 5)).step_by(5) {
+                let cell = Cell {
+                    x: u16::from_le_bytes([body[i], body[i + 1]]),
+                    y: u16::from_le_bytes([body[i + 2], body[i + 3]]),
+                    value: body[i + 4],
+                };
+                // Todo: Optimize this match
+                match cell.value {
+                    0 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Element::Air;
+                    }
+                    1 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Element::Water;
+                    }
+                    2 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Element::Sand;
+                    }
+                    _ => {}
                 }
-                1 => {
-                    sim.lock().unwrap().world[cell.y as usize][cell.x as usize] =
-                        nito::simulation::Element::Water;
-                }
-                2 => {
-                    sim.lock().unwrap().world[cell.y as usize][cell.x as usize] =
-                        nito::simulation::Element::Sand;
-                }
-                _ => {}
             }
         }
     }
