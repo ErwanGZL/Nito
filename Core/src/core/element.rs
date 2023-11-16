@@ -1,4 +1,5 @@
 use std::fmt::{Display, Formatter};
+use rand::Rng;
 
 use crate::{Action, Direction, Simulation, Vector2D};
 
@@ -48,6 +49,11 @@ impl Element {
         }
     }
     pub fn update(&self, position: Vector2D<usize>, simulation: &Simulation) -> Option<Action> {
+
+        let mut rng = rand::thread_rng();
+
+        let n: bool = rng.gen_bool(0.5);
+
         match self {
             Self::Air => {}
             Self::Water => {
@@ -56,23 +62,23 @@ impl Element {
                         return Some(Action::Swap(position, target));
                     }
                 }
-                if let Some((sw, target)) = simulation.at(&position, Direction::SW(1)) {
-                    if self.density() > sw.density() {
+                if let Some((diagonal, target)) = simulation.at(&position, if n {Direction::SW(1)} else {Direction::SE(1)}) {
+                    if self.density() > diagonal.density() {
                         return Some(Action::Swap(position, target));
                     }
                 }
-                if let Some((se, target)) = simulation.at(&position, Direction::SE(1)) {
-                    if self.density() > se.density() {
+                if let Some((diagonal, target)) = simulation.at(&position, if n {Direction::SE(1)} else {Direction::SW(1)}) {
+                    if self.density() > diagonal.density() {
                         return Some(Action::Swap(position, target));
                     }
                 }
-                if let Some((w, target)) = simulation.at(&position, Direction::W(1)) {
-                    if self.density() > w.density() {
+                if let Some((lateral, target)) = simulation.at(&position, if n {Direction::W(1)} else {Direction::E(1)}) {
+                    if self.density() > lateral.density() {
                         return Some(Action::Swap(position, target));
                     }
                 }
-                if let Some((e, target)) = simulation.at(&position, Direction::E(1)) {
-                    if self.density() > e.density() {
+                if let Some((lateral, target)) = simulation.at(&position, if n {Direction::E(1)} else {Direction::W(1)}) {
+                    if self.density() > lateral.density() {
                         return Some(Action::Swap(position, target));
                     }
                 }
@@ -83,13 +89,13 @@ impl Element {
                         return Some(Action::Swap(position, target));
                     }
                 }
-                if let Some((sw, target)) = simulation.at(&position, Direction::SW(1)) {
-                    if self.density() > sw.density() {
+                if let Some((diagonal, target)) = simulation.at(&position, if n {Direction::SW(1)} else {Direction::SE(1)}) {
+                    if self.density() > diagonal.density() {
                         return Some(Action::Swap(position, target));
                     }
                 }
-                if let Some((se, target)) = simulation.at(&position, Direction::SE(1)) {
-                    if self.density() > se.density() {
+                if let Some((diagonal, target)) = simulation.at(&position, if n {Direction::SE(1)} else {Direction::SW(1)}) {
+                    if self.density() > diagonal.density() {
                         return Some(Action::Swap(position, target));
                     }
                 }

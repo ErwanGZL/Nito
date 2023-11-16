@@ -12,4 +12,5 @@ name = "server"
 
 [dependencies]
 toml = "0.8.6"
+rand = "0.8"
 serde = { version = "1.0.190", features = ["derive"] }

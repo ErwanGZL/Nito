@@ -14,6 +14,7 @@ mod dispatcher_thread;
 mod input_thread;
 mod simulation_thread;
 
+
 fn main() -> std::io::Result<()> {
     let cfg = open_config();
 
