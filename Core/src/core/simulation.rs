@@ -1,12 +1,13 @@
 use std::fmt::{Display, Formatter};
 
 use crate::Element;
+use crate::Cell;
 use crate::Vector2D;
 use crate::{Action, Direction};
 
 pub struct Simulation {
     dimensions: Vector2D<usize>,
-    pub world: Vec<Vec<Element>>,
+    pub world: Vec<Vec<Cell>>,
 }
 
 impl Display for Simulation {
@@ -25,15 +26,27 @@ impl Simulation {
     pub fn new(x: usize, y: usize) -> Self {
         Self {
             dimensions: Vector2D { x, y },
-            world: vec![vec![Element::Air; x]; y],
+            world: vec![vec![Cell::new(Element::Air); x]; y],
         }
     }
     pub fn update(&mut self) {
         let buffer = self.world.clone();
         for (y, row) in buffer.iter().enumerate().rev() {
             for (x, cell) in row.iter().enumerate().rev() {
+
                 let action = cell.update(Vector2D { x, y }, &self);
+                // match action {
+                //     Some(_) => {
+                //         self.world[y][x].add_clock();
+                //     }
+                //     None => {}
+                // }
                 self.apply_actions(action);
+            }
+        }
+        for (y, row) in buffer.iter().enumerate().rev() {
+            for (x, _) in row.iter().enumerate().rev() {
+                self.world[y][x].reset_clock();
             }
         }
     }
@@ -44,12 +57,12 @@ impl Simulation {
         data.extend((self.dimensions.y as u16).to_le_bytes());
         for (y, row) in self.world.iter().enumerate() {
             for (x, cell) in row.iter().enumerate() {
-                match cell {
+                match cell.element() {
                     Element::Air => {}
                     _other => {
                         body.extend((x as u16).to_le_bytes());
                         body.extend((y as u16).to_le_bytes());
-                        body.push(*_other as u8);
+                        body.push(cell.element().to_byte());
                     }
                 }
             }
@@ -76,15 +89,22 @@ impl Simulation {
         if !self.in_bounds(&from) || !self.in_bounds(&destination) {
             return None;
         }
-        Some((self.world[destination.y][destination.x], destination))
+        Some((self.world[destination.y][destination.x].element(), destination))
     }
 
     pub fn apply_actions(&mut self, action: Option<Action>) {
         match action {
             Some(Action::Swap(from, to)) => {
+                // if self.world[from.y][from.x].clock() > 0
+                // {
+                //     return;
+                // }
+
                 let temp = self.world[from.y][from.x];
                 self.world[from.y][from.x] = self.world[to.y][to.x];
                 self.world[to.y][to.x] = temp;
+                // self.world[from.y][from.x].add_clock();
+                // self.world[to.y][to.x].add_clock();
             }
             None => {
                 // println!("No action");

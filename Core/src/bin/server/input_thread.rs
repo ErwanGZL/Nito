@@ -2,9 +2,9 @@ use std::io::Read;
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
 
-use nito::{Element, Simulation};
+use nito::{Element, Simulation, Cell};
 
-struct Cell {
+struct CellRead {
     x: u16,
     y: u16,
     value: u8,
@@ -42,7 +42,7 @@ pub fn handle_connection(
         {
             let mut sim = sim.lock().unwrap();
             for i in (0..(cell_no as usize * 5)).step_by(5) {
-                let cell = Cell {
+                let cell = CellRead {
                     x: u16::from_le_bytes([body[i], body[i + 1]]),
                     y: u16::from_le_bytes([body[i + 2], body[i + 3]]),
                     value: body[i + 4],
@@ -50,13 +50,13 @@ pub fn handle_connection(
                 // Todo: Optimize this match
                 match cell.value {
                     0 => {
-                        sim.world[cell.y as usize][cell.x as usize] = Element::Air;
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Air);
                     }
                     1 => {
-                        sim.world[cell.y as usize][cell.x as usize] = Element::Water;
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Water);
                     }
                     2 => {
-                        sim.world[cell.y as usize][cell.x as usize] = Element::Sand;
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Sand);
                     }
                     _ => {}
                 }
