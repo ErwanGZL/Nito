@@ -69,7 +69,6 @@ int Network::handleMessages()
         _data->unLock();
         return 1;
     }
-    _data->wipe();
     _data->setWidthHeight(_header.x, _header.y);
     for (int i = 0; i < _header.size; i++) {
         uint16_t x = _buffer[i * 5 + 1] << 8 | _buffer[i * 5];

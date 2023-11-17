@@ -60,6 +60,7 @@ pub fn handle_connection(
                     }
                     _ => {}
                 }
+                sim.world[cell.y as usize][cell.x as usize].set_update();
             }
         }
     }

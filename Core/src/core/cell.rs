@@ -6,7 +6,7 @@ use crate::Element;
 #[derive(Debug, Clone, Copy)]
 pub struct Cell {
     element: Element,
-    clock: u8,
+    updated: bool,
 }
 
 impl Display for Cell {
@@ -19,7 +19,7 @@ impl Cell {
     pub fn new(element: Element) -> Self {
         Self {
             element,
-            clock: 0,
+            updated: false,
         }
     }
     pub fn update(&self, position: Vector2D<usize>, simulation: &Simulation) -> Option<Action> {
@@ -30,15 +30,15 @@ impl Cell {
         self.element
     }
 
-    pub fn clock(&self) -> u8 {
-        self.clock
+    pub fn set_update(&mut self) {
+        self.updated = true;
     }
 
-    pub fn add_clock(&mut self) {
-        self.clock += 1;
+    pub fn reset_update(&mut self) {
+        self.updated = false;
     }
 
-    pub fn reset_clock(&mut self) {
-        self.clock = 0;
+    pub fn updated(&self) -> bool {
+        self.updated
     }
 }

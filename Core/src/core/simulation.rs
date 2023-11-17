@@ -31,38 +31,28 @@ impl Simulation {
     }
     pub fn update(&mut self) {
         let buffer = self.world.clone();
-        for (y, row) in buffer.iter().enumerate().rev() {
-            for (x, cell) in row.iter().enumerate().rev() {
-
+        for (y, row) in buffer.iter().enumerate() {
+            for (x, cell) in row.iter().enumerate() {
                 let action = cell.update(Vector2D { x, y }, &self);
-                // match action {
-                //     Some(_) => {
-                //         self.world[y][x].add_clock();
-                //     }
-                //     None => {}
-                // }
                 self.apply_actions(action);
             }
         }
-        for (y, row) in buffer.iter().enumerate().rev() {
-            for (x, _) in row.iter().enumerate().rev() {
-                self.world[y][x].reset_clock();
-            }
-        }
     }
-    pub fn dump(&self) -> Vec<u8> {
+    pub fn dump(&mut self) -> Vec<u8> {
         let mut data: Vec<u8> = vec![];
         let mut body: Vec<u8> = vec![];
         data.extend((self.dimensions.x as u16).to_le_bytes());
         data.extend((self.dimensions.y as u16).to_le_bytes());
-        for (y, row) in self.world.iter().enumerate() {
+        let buffer = self.world.clone();
+        for (y, row) in buffer.iter().enumerate() {
             for (x, cell) in row.iter().enumerate() {
-                match cell.element() {
-                    Element::Air => {}
+                match cell.updated() {
+                    false => {}
                     _other => {
                         body.extend((x as u16).to_le_bytes());
                         body.extend((y as u16).to_le_bytes());
                         body.push(cell.element().to_byte());
+                        self.world[y][x].reset_update();
                     }
                 }
             }
@@ -95,16 +85,12 @@ impl Simulation {
     pub fn apply_actions(&mut self, action: Option<Action>) {
         match action {
             Some(Action::Swap(from, to)) => {
-                // if self.world[from.y][from.x].clock() > 0
-                // {
-                //     return;
-                // }
-
                 let temp = self.world[from.y][from.x];
                 self.world[from.y][from.x] = self.world[to.y][to.x];
                 self.world[to.y][to.x] = temp;
-                // self.world[from.y][from.x].add_clock();
-                // self.world[to.y][to.x].add_clock();
+
+                self.world[from.y][from.x].set_update();
+                self.world[to.y][to.x].set_update();
             }
             None => {
                 // println!("No action");
