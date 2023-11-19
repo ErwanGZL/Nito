@@ -1,5 +1,6 @@
 use crate::Vector2D;
 
+#[derive(Clone, Copy)]
 pub enum Direction {
     N(u32),
     NE(u32),
@@ -34,6 +35,18 @@ impl Direction {
             Self::SW(d) => *d,
             Self::W(d) => *d,
             Self::NW(d) => *d,
+        }
+    }
+    pub fn set_distance(&mut self, distance: u32) {
+        match self {
+            Self::N(d) => *d = distance,
+            Self::NE(d) => *d = distance,
+            Self::E(d) => *d = distance,
+            Self::SE(d) => *d = distance,
+            Self::S(d) => *d = distance,
+            Self::SW(d) => *d = distance,
+            Self::W(d) => *d = distance,
+            Self::NW(d) => *d = distance,
         }
     }
 }

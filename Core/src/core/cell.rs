@@ -1,7 +1,7 @@
 use std::fmt::{Display, Formatter};
 
-use crate::{Action, Direction, Simulation, Vector2D};
 use crate::Element;
+use crate::{Action, Simulation, Vector2D};
 
 #[derive(Debug, Clone, Copy)]
 pub struct Cell {

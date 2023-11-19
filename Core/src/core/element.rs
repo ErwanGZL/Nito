@@ -1,9 +1,10 @@
 use std::fmt::{Display, Formatter};
+
 use rand::Rng;
 
 use crate::{Action, Direction, Simulation, Vector2D};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Element {
     Air,
     Water,
@@ -32,6 +33,23 @@ impl Physics for Element {
     }
 }
 
+impl Display for Element {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
+        match self {
+            Self::Air => {
+                write!(f, "·").unwrap();
+            }
+            Self::Water => {
+                write!(f, "~").unwrap();
+            }
+            Self::Sand => {
+                write!(f, "¤").unwrap();
+            }
+        }
+        Ok(())
+    }
+}
+
 impl Element {
     pub fn from_byte(byte: u8) -> Result<Self, ()> {
         match byte {
@@ -48,76 +66,354 @@ impl Element {
             Self::Sand => 2,
         }
     }
-    pub fn update(&self, position: Vector2D<usize>, simulation: &Simulation) -> Option<Action> {
 
+    pub fn update(&self, from: Vector2D<usize>, simulation: &Simulation) -> Option<Action> {
         let mut rng = rand::thread_rng();
-
-        let n: bool = rng.gen_bool(0.5);
 
         match self {
             Self::Air => {}
             Self::Water => {
-                if let Some((south, target)) = simulation.at(&position, Direction::S(1)) {
-                    if self.density() > south.density() {
-                        return Some(Action::Swap(position, target));
-                    }
+                if let Some(destination) = self.try_move_to(from, Direction::S(1), simulation) {
+                    return Some(Action::Swap(from, destination));
                 }
-                if let Some((diagonal, target)) = simulation.at(&position, if n {Direction::SW(1)} else {Direction::SE(1)}) {
-                    if self.density() > diagonal.density() {
-                        return Some(Action::Swap(position, target));
-                    }
+                if let Some(destination) = self.try_move_sides(from, Direction::S(1), simulation) {
+                    return Some(Action::Swap(from, destination));
                 }
-                if let Some((diagonal, target)) = simulation.at(&position, if n {Direction::SE(1)} else {Direction::SW(1)}) {
-                    if self.density() > diagonal.density() {
-                        return Some(Action::Swap(position, target));
-                    }
-                }
-                if let Some((lateral, target)) = simulation.at(&position, if n {Direction::W(1)} else {Direction::E(1)}) {
-                    if self.density() > lateral.density() {
-                        return Some(Action::Swap(position, target));
-                    }
-                }
-                if let Some((lateral, target)) = simulation.at(&position, if n {Direction::E(1)} else {Direction::W(1)}) {
-                    if self.density() > lateral.density() {
-                        return Some(Action::Swap(position, target));
-                    }
+                if let Some(destination) = self.try_spread(from, 5, simulation) {
+                    return Some(Action::Swap(from, destination));
                 }
             }
             Self::Sand => {
-                if let Some((south, target)) = simulation.at(&position, Direction::S(1)) {
-                    if self.density() > south.density() {
-                        return Some(Action::Swap(position, target));
-                    }
+                if let Some(destination) = self.try_move_to(from, Direction::S(2), simulation) {
+                    return Some(Action::Swap(from, destination));
                 }
-                if let Some((diagonal, target)) = simulation.at(&position, if n {Direction::SW(1)} else {Direction::SE(1)}) {
-                    if self.density() > diagonal.density() {
-                        return Some(Action::Swap(position, target));
-                    }
-                }
-                if let Some((diagonal, target)) = simulation.at(&position, if n {Direction::SE(1)} else {Direction::SW(1)}) {
-                    if self.density() > diagonal.density() {
-                        return Some(Action::Swap(position, target));
-                    }
+                let d = rng.gen_range(1..=2);
+                if let Some(destination) = self.try_move_sides(from, Direction::S(d), simulation) {
+                    return Some(Action::Swap(from, destination));
                 }
             }
         }
         None
     }
-}
 
-impl Display for Element {
-    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
-        match self {
-            Self::Air => {
-                write!(f, "·").unwrap();
+    fn try_move_between_opposite(
+        &self,
+        from: Vector2D<usize>,
+        direction: Direction,
+        simulation: &Simulation,
+    ) -> Option<Vector2D<usize>> {
+        let mut rng = rand::thread_rng();
+        let first = rng.gen_bool(0.5);
+        match direction {
+            Direction::W(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::E(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::W(d), simulation) {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::W(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::E(d), simulation) {
+                        return Some(destination);
+                    }
+                }
             }
-            Self::Water => {
-                write!(f, "~").unwrap();
+            Direction::SW(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::NE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::SW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::SW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::NE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                }
             }
-            Self::Sand => {
-                write!(f, "¤").unwrap();
+            Direction::S(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::N(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::S(d), simulation) {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::S(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::N(d), simulation) {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::SE(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::NW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::SE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::SE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::NW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::E(d) => {
+                self.try_move_between_opposite(from, Direction::W(d), simulation);
+            }
+            Direction::NE(d) => {
+                self.try_move_between_opposite(from, Direction::SW(d), simulation);
+            }
+            Direction::N(d) => {
+                self.try_move_between_opposite(from, Direction::S(d), simulation);
+            }
+            Direction::NW(d) => {
+                self.try_move_between_opposite(from, Direction::SE(d), simulation);
             }
         }
-        Ok(())
+        None
+    }
+
+    fn try_spread(
+        &self,
+        from: Vector2D<usize>,
+        distance: u32,
+        simulation: &Simulation,
+    ) -> Option<Vector2D<usize>> {
+        let mut rng = rand::thread_rng();
+        let first = rng.gen_bool(0.5);
+        let mut destination = None;
+        for i in 1..=distance {
+            if let Some(a) = self.try_move_to(
+                from,
+                if first {
+                    Direction::W(i)
+                } else {
+                    Direction::E(i)
+                },
+                simulation,
+            ) {
+                if let Some((e, _b)) = simulation.at(&a, Direction::S(1)) {
+                    if e.density() <= self.density() {
+                        return Some(a);
+                    }
+                }
+                destination = Some(a);
+            }
+        }
+        destination
+    }
+
+    fn try_move_to(
+        &self,
+        from: Vector2D<usize>,
+        mut direction: Direction,
+        simulation: &Simulation,
+    ) -> Option<Vector2D<usize>> {
+        let distance = direction.distance();
+        let mut destination = None;
+        for i in 1..=distance {
+            direction.set_distance(i);
+            destination = match simulation.at(&from, direction) {
+                Some((e, d)) => {
+                    if e.density() >= self.density() {
+                        return destination;
+                    }
+                    Some(d)
+                }
+                None => {
+                    return destination;
+                }
+            };
+        }
+        destination
+    }
+
+    fn try_move_sides(
+        &self,
+        from: Vector2D<usize>,
+        orientation: Direction,
+        simulation: &Simulation,
+    ) -> Option<Vector2D<usize>> {
+        let mut rng = rand::thread_rng();
+        let first = rng.gen_bool(0.5);
+        match orientation {
+            Direction::N(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::NW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::NE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::NE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::NW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::S(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::SW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::SE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::SE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::SW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::E(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::NE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::SE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::SE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::NE(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::W(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::NW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::SW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::SW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::NW(d), simulation)
+                    {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::NW(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::N(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::W(d), simulation) {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::W(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::N(d), simulation) {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::NE(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::N(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::E(d), simulation) {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::E(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::N(d), simulation) {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::SW(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::S(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::W(d), simulation) {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::W(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::S(d), simulation) {
+                        return Some(destination);
+                    }
+                }
+            }
+            Direction::SE(d) => {
+                if first {
+                    if let Some(destination) = self.try_move_to(from, Direction::S(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::E(d), simulation) {
+                        return Some(destination);
+                    }
+                } else {
+                    if let Some(destination) = self.try_move_to(from, Direction::E(d), simulation) {
+                        return Some(destination);
+                    }
+                    if let Some(destination) = self.try_move_to(from, Direction::S(d), simulation) {
+                        return Some(destination);
+                    }
+                }
+            }
+        }
+        None
     }
 }
