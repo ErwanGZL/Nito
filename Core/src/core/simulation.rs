@@ -1,7 +1,9 @@
 use std::fmt::{Display, Formatter};
 
-use crate::Element;
+use rand::seq::SliceRandom;
+
 use crate::Cell;
+use crate::Element;
 use crate::Vector2D;
 use crate::{Action, Direction};
 
@@ -32,8 +34,11 @@ impl Simulation {
     pub fn update(&mut self) {
         let buffer = self.world.clone();
         for (y, row) in buffer.iter().enumerate() {
-            for (x, cell) in row.iter().enumerate() {
-                let action = cell.update(Vector2D { x, y }, &self);
+            let mut shuffle = (0..row.len()).collect::<Vec<usize>>();
+            shuffle.shuffle(&mut rand::thread_rng());
+
+            for x in shuffle {
+                let action = row[x].update(Vector2D { x, y }, &self);
                 self.apply_actions(action);
             }
         }
@@ -79,7 +84,10 @@ impl Simulation {
         if !self.in_bounds(&from) || !self.in_bounds(&destination) {
             return None;
         }
-        Some((self.world[destination.y][destination.x].element(), destination))
+        Some((
+            self.world[destination.y][destination.x].element(),
+            destination,
+        ))
     }
 
     pub fn apply_actions(&mut self, action: Option<Action>) {
