@@ -58,6 +58,9 @@ pub fn handle_connection(
                     2 => {
                         sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Sand);
                     }
+                    3 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Wood);
+                    }
                     _ => {}
                 }
                 sim.world[cell.y as usize][cell.x as usize].set_update();
