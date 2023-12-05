@@ -1,5 +1,5 @@
-use crate::Vector2D;
+use crate::{Direction, Vector2D};
 
 pub enum Action {
-    Swap(Vector2D<usize>, Vector2D<usize>),
+    Move(Vector2D<usize>, Direction),
 }

@@ -75,7 +75,7 @@ impl Simulation {
         &self,
         from: &Vector2D<usize>,
         direction: Direction,
-    ) -> Option<(Element, Vector2D<usize>)> {
+    ) -> Option<(Cell, Vector2D<usize>)> {
         let factor = direction.factor();
         let destination = Vector2D {
             x: (from.x as isize + direction.distance() as isize * factor.x as isize) as usize,
@@ -84,25 +84,32 @@ impl Simulation {
         if !self.in_bounds(&from) || !self.in_bounds(&destination) {
             return None;
         }
-        Some((
-            self.world[destination.y][destination.x].element(),
-            destination,
-        ))
+        Some((self.world[destination.y][destination.x], destination))
     }
 
     pub fn apply_actions(&mut self, action: Option<Action>) {
         match action {
-            Some(Action::Swap(from, to)) => {
-                let temp = self.world[from.y][from.x];
-                self.world[from.y][from.x] = self.world[to.y][to.x];
-                self.world[to.y][to.x] = temp;
-
-                self.world[from.y][from.x].set_update();
-                self.world[to.y][to.x].set_update();
+            Some(Action::Move(mut from, to)) => {
+                for i in 1..=to.distance() {
+                    let factor = to.factor();
+                    let destination = Vector2D {
+                        x: (from.x as isize + factor.x as isize) as usize,
+                        y: (from.y as isize + factor.y as isize) as usize,
+                    };
+                    self.swap(&from, &destination);
+                    from = destination;
+                }
             }
-            None => {
-                // println!("No action");
-            }
+            None => {}
         }
+    }
+
+    pub fn swap(&mut self, from: &Vector2D<usize>, to: &Vector2D<usize>) {
+        let temp = self.world[from.y][from.x];
+        self.world[from.y][from.x] = self.world[to.y][to.x];
+        self.world[to.y][to.x] = temp;
+
+        self.world[from.y][from.x].set_update();
+        self.world[to.y][to.x].set_update();
     }
 }
