@@ -76,6 +76,7 @@ impl Cell {
                 }
             }
             Element::Wood => {}
+            _ => {}
         }
         None
     }

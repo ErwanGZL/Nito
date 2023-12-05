@@ -6,6 +6,12 @@ pub enum Element {
     Water,
     Sand,
     Wood,
+    Fire,
+    Smoke,
+    Acid,
+    Lava,
+    Gas,
+    Stone,
 }
 
 pub trait Physics {
@@ -16,10 +22,16 @@ pub trait Physics {
 impl Physics for Element {
     fn density(&self) -> f64 {
         match self {
-            Self::Air => 0.0,
-            Self::Water => 1.0,
-            Self::Sand => 2.0,
+            Self::Air => 1.0,
+            Self::Water => 2.0,
+            Self::Sand => 3.0,
             Self::Wood => 10.0,
+            Self::Fire => 0.0,
+            Self::Smoke => 0.5,
+            Self::Acid => 1.5,
+            Self::Lava => 4.0,
+            Self::Gas => 0.5,
+            Self::Stone => 20.0,
         }
     }
     fn flammability(&self) -> f64 {
@@ -28,6 +40,12 @@ impl Physics for Element {
             Self::Water => 0.0,
             Self::Sand => 0.0,
             Self::Wood => 1.0,
+            Self::Fire => 0.0,
+            Self::Smoke => 0.0,
+            Self::Acid => 0.0,
+            Self::Lava => 0.0,
+            Self::Gas => 2.0,
+            Self::Stone => 0.0,
         }
     }
 }
@@ -47,6 +65,7 @@ impl Display for Element {
             Self::Wood => {
                 write!(f, "▓").unwrap();
             }
+            _ => {}
         }
         Ok(())
     }
@@ -59,6 +78,12 @@ impl Element {
             1 => Ok(Self::Water),
             2 => Ok(Self::Sand),
             3 => Ok(Self::Wood),
+            4 => Ok(Self::Fire),
+            5 => Ok(Self::Smoke),
+            6 => Ok(Self::Acid),
+            7 => Ok(Self::Lava),
+            8 => Ok(Self::Gas),
+            9 => Ok(Self::Stone),
             _ => Err(()),
         }
     }
@@ -68,6 +93,12 @@ impl Element {
             Self::Water => 1,
             Self::Sand => 2,
             Self::Wood => 3,
+            Self::Fire => 4,
+            Self::Smoke => 5,
+            Self::Acid => 6,
+            Self::Lava => 7,
+            Self::Gas => 8,
+            Self::Stone => 9,
         }
     }
 }
