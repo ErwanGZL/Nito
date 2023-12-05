@@ -64,6 +64,24 @@ pub fn handle_connection(
                     3 => {
                         sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Wood);
                     }
+                    4 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Fire);
+                    }
+                    5 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Smoke);
+                    }
+                    6 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Acid);
+                    }
+                    7 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Lava);
+                    }
+                    8 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Gas);
+                    }
+                    9 => {
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Stone);
+                    }
                     _ => {}
                 }
                 sim.world[cell.y as usize][cell.x as usize].set_update();
