@@ -48,7 +48,9 @@ pub fn handle_connection(
                     value: body[i + 4],
                 };
                 // Todo: Optimize this match
-                if sim.world[cell.y as usize][cell.x as usize].element() != Element::Air {
+                if cell.value != 0
+                    && sim.world[cell.y as usize][cell.x as usize].element() != Element::Air
+                {
                     continue;
                 }
                 match cell.value {
