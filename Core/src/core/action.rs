@@ -1,5 +1,8 @@
-use crate::{Direction, Vector2D};
+use crate::{Direction, Element, Vector2D};
 
 pub enum Action {
     Move(Vector2D<usize>, Direction),
+    Burn(Vector2D<usize>),
+    Eat(Vector2D<usize>, Element),
+    Die(Vector2D<usize>, Element),
 }

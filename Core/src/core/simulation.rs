@@ -90,7 +90,7 @@ impl Simulation {
     pub fn apply_actions(&mut self, action: Option<Action>) {
         match action {
             Some(Action::Move(mut from, to)) => {
-                for i in 1..=to.distance() {
+                for _ in 1..=to.distance() {
                     let factor = to.factor();
                     let destination = Vector2D {
                         x: (from.x as isize + factor.x as isize) as usize,
@@ -100,6 +100,7 @@ impl Simulation {
                     from = destination;
                 }
             }
+            Some(_) => {}
             None => {}
         }
     }

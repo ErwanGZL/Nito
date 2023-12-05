@@ -2,7 +2,7 @@ use std::io::Read;
 use std::net::TcpStream;
 use std::sync::{Arc, Mutex};
 
-use nito::{Element, Simulation, Cell};
+use nito::{Cell, Element, Simulation, Vector2D};
 
 struct CellRead {
     x: u16,
@@ -48,6 +48,9 @@ pub fn handle_connection(
                     value: body[i + 4],
                 };
                 // Todo: Optimize this match
+                if sim.world[cell.y as usize][cell.x as usize].element() != Element::Air {
+                    continue;
+                }
                 match cell.value {
                     0 => {
                         sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Air);
