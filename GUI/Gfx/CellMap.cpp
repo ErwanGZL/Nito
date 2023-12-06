@@ -3,7 +3,7 @@
 CellMap::CellMap(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors, Network *network) : _data(data), _window(window), _tool(Tool), _colors(colors), _network(network)
 {
     _frame.setFillColor(sf::Color::Transparent);
-    _frame.setOutlineColor(sf::Color::White);
+    _frame.setOutlineColor(sf::Color::Black);
     _frame.setOutlineThickness(2);
     _rect.setFillColor(sf::Color::Transparent);
 }

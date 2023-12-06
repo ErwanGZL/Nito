@@ -3,10 +3,10 @@
 Ui::Ui(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors, Network *network) : _data(data), _window(window), _tool(Tool), _colors(colors), _network(network)
 {
     _frame.setFillColor(sf::Color::Transparent);
-    _frame.setOutlineColor(sf::Color::White);
+    _frame.setOutlineColor(sf::Color::Black);
     _frame.setOutlineThickness(2);
     _selected.setFillColor(sf::Color::Transparent);
-    _selected.setOutlineColor(sf::Color::Black);
+    _selected.setOutlineColor(sf::Color::White);
     _selected.setOutlineThickness(2);
     _selected.setPosition(sf::Vector2f(-100, -100));
     _hover.setFillColor(sf::Color(255, 255, 255, 100));
