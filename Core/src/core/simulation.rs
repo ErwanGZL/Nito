@@ -1,7 +1,10 @@
 use std::fmt::{Display, Formatter};
 
 use rand::seq::SliceRandom;
+use rand::Rng;
 
+use crate::direction::Cardinal;
+use crate::element::Physics;
 use crate::Cell;
 use crate::Element;
 use crate::Vector2D;
@@ -39,7 +42,10 @@ impl Simulation {
 
             for x in shuffle {
                 let action = row[x].update(Vector2D { x, y }, &self);
-                self.apply_actions(action);
+                for action in action {
+                    self.apply_actions(action);
+                }
+                self.world[y][x].decay();
             }
         }
     }
@@ -87,9 +93,9 @@ impl Simulation {
         Some((self.world[destination.y][destination.x], destination))
     }
 
-    pub fn apply_actions(&mut self, action: Option<Action>) {
+    pub fn apply_actions(&mut self, action: Action) {
         match action {
-            Some(Action::Move(mut from, to)) => {
+            Action::Move(mut from, to) => {
                 for _ in 1..=to.distance() {
                     let factor = to.factor();
                     let destination = Vector2D {
@@ -100,8 +106,33 @@ impl Simulation {
                     from = destination;
                 }
             }
-            Some(_) => {}
-            None => {}
+            Action::Burn(position) => {
+                let source = self.world[position.y][position.x].element();
+                let mut rng = rand::thread_rng();
+                for neighbour in self.get_neighbours(&position) {
+                    let ignite = rng.gen_bool(neighbour.0.element().flammability() * source.heat());
+                    if ignite {
+                        if neighbour.0.element() == Element::Wood {
+                            self.world[neighbour.1.y][neighbour.1.x].element = Element::Ember;
+                        } else {
+                            self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Fire);
+                        }
+                        self.world[neighbour.1.y][neighbour.1.x].set_update();
+                    }
+                    if source == Element::Ember
+                        && neighbour.0.element() == Element::Air
+                        && rng.gen_bool(0.001)
+                    {
+                        if rng.gen_bool(0.5) {
+                            self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Smoke);
+                        } else {
+                            self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Fire);
+                        }
+                        self.world[neighbour.1.y][neighbour.1.x].set_update();
+                    }
+                }
+            }
+            _ => {}
         }
     }
 
@@ -112,5 +143,15 @@ impl Simulation {
 
         self.world[from.y][from.x].set_update();
         self.world[to.y][to.x].set_update();
+    }
+
+    pub fn get_neighbours(&self, position: &Vector2D<usize>) -> Vec<(Cell, Vector2D<usize>)> {
+        let mut neighbours: Vec<(Cell, Vector2D<usize>)> = vec![];
+        for orientation in Cardinal::iter() {
+            if let Some((cell, destination)) = self.at(position, Direction::new(orientation, 1)) {
+                neighbours.push((cell, destination));
+            }
+        }
+        neighbours
     }
 }

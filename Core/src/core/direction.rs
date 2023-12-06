@@ -18,6 +18,23 @@ pub enum Cardinal {
     NW,
 }
 
+impl Cardinal {
+    pub fn iter() -> impl Iterator<Item = Cardinal> {
+        [
+            Cardinal::N,
+            Cardinal::NE,
+            Cardinal::E,
+            Cardinal::SE,
+            Cardinal::S,
+            Cardinal::SW,
+            Cardinal::W,
+            Cardinal::NW,
+        ]
+        .iter()
+        .copied()
+    }
+}
+
 impl Direction {
     pub fn factor(&self) -> Vector2D<i8> {
         match self.cardinal {

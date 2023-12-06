@@ -9,7 +9,7 @@ pub enum Element {
     Fire,
     Smoke,
     Acid,
-    Lava,
+    Ember,
     Gas,
     Stone,
 }
@@ -17,6 +17,8 @@ pub enum Element {
 pub trait Physics {
     fn density(&self) -> f64;
     fn flammability(&self) -> f64;
+    fn solid(&self) -> bool;
+    fn heat(&self) -> f64;
 }
 
 impl Physics for Element {
@@ -29,7 +31,7 @@ impl Physics for Element {
             Self::Fire => 0.0,
             Self::Smoke => 0.5,
             Self::Acid => 1.5,
-            Self::Lava => 4.0,
+            Self::Ember => 4.0,
             Self::Gas => 0.5,
             Self::Stone => 20.0,
         }
@@ -39,12 +41,40 @@ impl Physics for Element {
             Self::Air => 0.0,
             Self::Water => 0.0,
             Self::Sand => 0.0,
-            Self::Wood => 1.0,
+            Self::Wood => 0.05,
             Self::Fire => 0.0,
             Self::Smoke => 0.0,
             Self::Acid => 0.0,
-            Self::Lava => 0.0,
-            Self::Gas => 2.0,
+            Self::Ember => 0.0,
+            Self::Gas => 1.0,
+            Self::Stone => 0.0,
+        }
+    }
+    fn solid(&self) -> bool {
+        match self {
+            Self::Air => false,
+            Self::Water => false,
+            Self::Sand => true,
+            Self::Wood => true,
+            Self::Fire => false,
+            Self::Smoke => false,
+            Self::Acid => false,
+            Self::Ember => true,
+            Self::Gas => false,
+            Self::Stone => true,
+        }
+    }
+    fn heat(&self) -> f64 {
+        match self {
+            Self::Air => 0.0,
+            Self::Water => 0.0,
+            Self::Sand => 0.0,
+            Self::Wood => 0.0,
+            Self::Fire => 1.0,
+            Self::Smoke => 0.0,
+            Self::Acid => 0.0,
+            Self::Ember => 0.4,
+            Self::Gas => 0.0,
             Self::Stone => 0.0,
         }
     }
@@ -81,7 +111,7 @@ impl Element {
             4 => Ok(Self::Fire),
             5 => Ok(Self::Smoke),
             6 => Ok(Self::Acid),
-            7 => Ok(Self::Lava),
+            7 => Ok(Self::Ember),
             8 => Ok(Self::Gas),
             9 => Ok(Self::Stone),
             _ => Err(()),
@@ -96,7 +126,7 @@ impl Element {
             Self::Fire => 4,
             Self::Smoke => 5,
             Self::Acid => 6,
-            Self::Lava => 7,
+            Self::Ember => 7,
             Self::Gas => 8,
             Self::Stone => 9,
         }

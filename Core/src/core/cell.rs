@@ -11,7 +11,7 @@ use crate::{Direction, Element};
 pub struct Cell {
     pub element: Element,
     pub velocity: Vector2D<i8>,
-    pub lifetime: Option<u32>,
+    pub life: Option<u32>,
     variant: u8,
     updated: bool,
 }
@@ -27,58 +27,107 @@ impl Cell {
         let mut rng = rand::thread_rng();
         let variant = rng.gen_range(0..=255);
         let velocity = Vector2D { x: 0, y: 0 };
+        let mut life = None;
+        match element {
+            Element::Wood => life = Some(rng.gen_range(150..=300)),
+            Element::Fire => life = Some(5),
+            Element::Smoke => life = Some(20),
+            _ => {}
+        }
         Self {
             element,
             velocity,
-            lifetime: None,
+            life,
             variant,
             updated: false,
         }
     }
-    pub fn update(&self, origin: Vector2D<usize>, sim: &Simulation) -> Option<Action> {
+    pub fn update(&self, origin: Vector2D<usize>, sim: &Simulation) -> Vec<Action> {
+        type Dir = Direction;
+        type Car = Cardinal;
+        let mut actions: Vec<Action> = vec![];
         let mut rng = rand::thread_rng();
-        let first = rng.gen_bool(0.5);
         match self.element {
             Element::Air => {}
             Element::Water => {
-                if let Some(action) = self.move_to(origin, Direction::new(Cardinal::S, 3), sim) {
-                    return Some(action);
-                }
-                if first {
-                    if let Some(action) = self.move_to(origin, Direction::new(Cardinal::SE, 3), sim)
-                    {
-                        return Some(action);
-                    }
-                    if let Some(action) = self.move_to(origin, Direction::new(Cardinal::E, 4), sim)
-                    {
-                        return Some(action);
+                let first = rng.gen_bool(0.5);
+                if let Some(action) = self.move_to(origin, Dir::new(Car::S, 3), sim) {
+                    actions.push(action);
+                } else if first {
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::SE, 3), sim) {
+                        actions.push(action);
+                    } else if let Some(action) = self.move_to(origin, Dir::new(Car::E, 4), sim) {
+                        actions.push(action);
                     }
                 } else {
-                    if let Some(action) = self.move_to(origin, Direction::new(Cardinal::SW, 3), sim)
-                    {
-                        return Some(action);
-                    }
-                    if let Some(action) = self.move_to(origin, Direction::new(Cardinal::W, 4), sim)
-                    {
-                        return Some(action);
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::SW, 3), sim) {
+                        actions.push(action);
+                    } else if let Some(action) = self.move_to(origin, Dir::new(Car::W, 4), sim) {
+                        actions.push(action);
                     }
                 }
             }
             Element::Sand => {
-                if let Some(action) = self.move_to(origin, Direction::new(Cardinal::S, 2), sim) {
-                    return Some(action);
-                }
-                if let Some(action) = self.move_to(origin, Direction::new(Cardinal::SW, 2), sim) {
-                    return Some(action);
-                }
-                if let Some(action) = self.move_to(origin, Direction::new(Cardinal::SE, 2), sim) {
-                    return Some(action);
+                if let Some(action) = self.move_to(origin, Dir::new(Car::S, 2), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::SW, 2), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::SE, 2), sim) {
+                    actions.push(action);
                 }
             }
-            Element::Wood => {}
+            Element::Fire => {
+                actions.push(Action::Burn(origin));
+                let dir = rng.gen_range(0..12);
+                if dir == 0 {
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::E, 1), sim) {
+                        actions.push(action);
+                    }
+                } else if dir == 1 {
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::W, 1), sim) {
+                        actions.push(action);
+                    }
+                } else if dir == 2 || dir == 3 {
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::NE, 1), sim) {
+                        actions.push(action);
+                    }
+                } else if dir == 4 || dir == 5 {
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::NW, 1), sim) {
+                        actions.push(action);
+                    }
+                } else {
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::N, 1), sim) {
+                        actions.push(action);
+                    }
+                }
+            }
+            Element::Smoke => {
+                let first = rng.gen_bool(0.5);
+                if let Some(action) = self.move_to(origin, Dir::new(Car::N, 1), sim) {
+                    actions.push(action);
+                }
+                if first {
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::NE, 1), sim) {
+                        actions.push(action);
+                    }
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::E, 1), sim) {
+                        actions.push(action);
+                    }
+                } else {
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::NW, 1), sim) {
+                        actions.push(action);
+                    }
+                    if let Some(action) = self.move_to(origin, Dir::new(Car::W, 1), sim) {
+                        actions.push(action);
+                    }
+                }
+            }
+            Element::Ember => {
+                actions.push(Action::Burn(origin));
+            }
             _ => {}
         }
-        None
+        actions
     }
 
     fn move_to(
@@ -92,7 +141,16 @@ impl Cell {
         for i in 1..=distance {
             to.set_distance(i);
             if let Some((cell, _)) = simulation.at(&from, to) {
-                if self.element.density() > cell.element.density() {
+                if cell.element.solid() {
+                    break;
+                }
+                if to.factor().y == 1 && self.element.density() > cell.element.density() {
+                    destination = Some(Action::Move(from, to));
+                    continue;
+                } else if to.factor().y == -1 && self.element.density() < cell.element.density() {
+                    destination = Some(Action::Move(from, to));
+                    continue;
+                } else if to.factor().y == 0 && self.element.density() >= cell.element.density() {
                     destination = Some(Action::Move(from, to));
                     continue;
                 }
@@ -116,5 +174,35 @@ impl Cell {
 
     pub fn updated(&self) -> bool {
         self.updated
+    }
+
+    pub fn decay(&mut self) {
+        let mut transform = Element::Air;
+        match self.life {
+            Some(life) => {
+                match self.element {
+                    Element::Fire => {
+                        self.life = Some(life - 1);
+                    }
+                    Element::Smoke => {
+                        self.life = Some(life - 1);
+                    }
+                    Element::Ember => {
+                        self.life = Some(life - 1);
+                        if rand::thread_rng().gen_bool(0.5) {
+                            transform = Element::Smoke;
+                        } else {
+                            transform = Element::Fire;
+                        }
+                    }
+                    _ => {}
+                }
+                if life == 1 {
+                    *self = Cell::new(transform);
+                    self.set_update();
+                }
+            }
+            None => {}
+        }
     }
 }

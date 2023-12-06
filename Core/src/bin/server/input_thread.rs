@@ -76,7 +76,7 @@ pub fn handle_connection(
                         sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Acid);
                     }
                     7 => {
-                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Lava);
+                        sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Ember);
                     }
                     8 => {
                         sim.world[cell.y as usize][cell.x as usize] = Cell::new(Element::Gas);
