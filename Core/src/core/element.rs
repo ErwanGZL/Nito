@@ -12,6 +12,7 @@ pub enum Element {
     Ember,
     Gas,
     Stone,
+    Coal,
 }
 
 pub trait Physics {
@@ -34,6 +35,7 @@ impl Physics for Element {
             Self::Ember => 4.0,
             Self::Gas => 0.5,
             Self::Stone => 20.0,
+            Self::Coal => 10.0,
         }
     }
     fn flammability(&self) -> f64 {
@@ -48,6 +50,7 @@ impl Physics for Element {
             Self::Ember => 0.0,
             Self::Gas => 1.0,
             Self::Stone => 0.0,
+            Self::Coal => 0.01,
         }
     }
     fn solid(&self) -> bool {
@@ -62,6 +65,7 @@ impl Physics for Element {
             Self::Ember => true,
             Self::Gas => false,
             Self::Stone => true,
+            Self::Coal => true,
         }
     }
     fn heat(&self) -> f64 {
@@ -76,6 +80,7 @@ impl Physics for Element {
             Self::Ember => 0.4,
             Self::Gas => 0.0,
             Self::Stone => 0.0,
+            Self::Coal => 0.0,
         }
     }
 }
@@ -114,6 +119,7 @@ impl Element {
             7 => Ok(Self::Ember),
             8 => Ok(Self::Gas),
             9 => Ok(Self::Stone),
+            10 => Ok(Self::Coal),
             _ => Err(()),
         }
     }
@@ -129,6 +135,7 @@ impl Element {
             Self::Ember => 7,
             Self::Gas => 8,
             Self::Stone => 9,
+            Self::Coal => 10,
         }
     }
 }

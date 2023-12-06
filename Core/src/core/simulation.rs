@@ -114,6 +114,8 @@ impl Simulation {
                     if ignite {
                         if neighbour.0.element() == Element::Wood {
                             self.world[neighbour.1.y][neighbour.1.x].element = Element::Ember;
+                        } else if neighbour.0.element() == Element::Coal {
+                            self.world[neighbour.1.y][neighbour.1.x].element = Element::Ember;
                         } else {
                             self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Fire);
                         }
@@ -121,7 +123,7 @@ impl Simulation {
                     }
                     if source == Element::Ember
                         && neighbour.0.element() == Element::Air
-                        && rng.gen_bool(0.001)
+                        && rng.gen_bool(0.005)
                     {
                         if rng.gen_bool(0.5) {
                             self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Smoke);
@@ -129,6 +131,12 @@ impl Simulation {
                             self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Fire);
                         }
                         self.world[neighbour.1.y][neighbour.1.x].set_update();
+                    }
+                    if source == Element::Ember
+                        && neighbour.0.element() == Element::Water
+                    {
+                        self.world[position.y][position.x] = Cell::new(Element::Coal);
+                        self.world[position.y][position.x].set_update();
                     }
                 }
             }

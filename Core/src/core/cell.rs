@@ -30,6 +30,7 @@ impl Cell {
         let mut life = None;
         match element {
             Element::Wood => life = Some(rng.gen_range(150..=300)),
+            Element::Coal => life = Some(rng.gen_range(500..=650)),
             Element::Fire => life = Some(5),
             Element::Smoke => life = Some(20),
             _ => {}
@@ -56,16 +57,17 @@ impl Cell {
                 } else if first {
                     if let Some(action) = self.move_to(origin, Dir::new(Car::SE, 3), sim) {
                         actions.push(action);
-                    } else if let Some(action) = self.move_to(origin, Dir::new(Car::E, 4), sim) {
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::E, 4), sim) {
                         actions.push(action);
-                    }
+                }
                 } else {
                     if let Some(action) = self.move_to(origin, Dir::new(Car::SW, 3), sim) {
                         actions.push(action);
-                    } else if let Some(action) = self.move_to(origin, Dir::new(Car::W, 4), sim) {
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::W, 4), sim) {
                         actions.push(action);
-                    }
                 }
+                }
+
             }
             Element::Sand => {
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 2), sim) {

@@ -41,10 +41,11 @@ class Gfx {
             {2, sf::Color(246, 215, 176)}, // sand
             {3, sf::Color(130, 94, 51)}, //wood
             {4, sf::Color(255, 85, 33)}, //fire
-            {5, sf::Color(255, 255, 255)}, //smoke
+            {5, sf::Color(200, 200, 200)}, //smoke
             {6, sf::Color(0, 200, 0)}, //acid
-            {7, sf::Color(255, 0, 0)}, //lava
+            {7, sf::Color(237, 54, 33)}, //ember
             {8, sf::Color(200, 200, 0)}, //gas
             {9, sf::Color(128, 128, 128)}, //stone
+            {10, sf::Color(30, 30, 30)}, //coal
         };
 };
