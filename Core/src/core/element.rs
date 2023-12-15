@@ -13,6 +13,13 @@ pub enum Element {
     Gas,
     Stone,
     Coal,
+    Salt,
+    Cinder,
+    Lava,
+    Oil,
+    Moss,
+    CanonPowder,
+    Ice,
 }
 
 pub trait Physics {
@@ -36,6 +43,13 @@ impl Physics for Element {
             Self::Gas => 0.5,
             Self::Stone => 20.0,
             Self::Coal => 10.0,
+            Self::Salt => 2.0,
+            Self::Cinder => 1.2,
+            Self::Lava => 5.0,
+            Self::Oil => 1.5,
+            Self::Moss => 1.5,
+            Self::CanonPowder => 3.0,
+            Self::Ice => 1.8,
         }
     }
     fn flammability(&self) -> f64 {
@@ -51,6 +65,13 @@ impl Physics for Element {
             Self::Gas => 1.0,
             Self::Stone => 0.0,
             Self::Coal => 0.01,
+            Self::Salt => 0.0,
+            Self::Cinder => 0.0,
+            Self::Lava => 0.0,
+            Self::Oil => 0.1,
+            Self::Moss => 0.1,
+            Self::CanonPowder => 1.0,
+            Self::Ice => 0.0,
         }
     }
     fn solid(&self) -> bool {
@@ -66,6 +87,13 @@ impl Physics for Element {
             Self::Gas => false,
             Self::Stone => true,
             Self::Coal => true,
+            Self::Salt => true,
+            Self::Cinder => true,
+            Self::Lava => false,
+            Self::Oil => false,
+            Self::Moss => true,
+            Self::CanonPowder => true,
+            Self::Ice => true,
         }
     }
     fn heat(&self) -> f64 {
@@ -81,6 +109,13 @@ impl Physics for Element {
             Self::Gas => 0.0,
             Self::Stone => 0.0,
             Self::Coal => 0.0,
+            Self::Salt => 0.0,
+            Self::Cinder => 0.0,
+            Self::Lava => 1.0,
+            Self::Oil => 0.0,
+            Self::Moss => 0.0,
+            Self::CanonPowder => 0.0,
+            Self::Ice => 0.0,
         }
     }
 }
@@ -136,6 +171,13 @@ impl Element {
             Self::Gas => 8,
             Self::Stone => 9,
             Self::Coal => 10,
+            Self::Salt => 11,
+            Self::Cinder => 12,
+            Self::Lava => 13,
+            Self::Oil => 14,
+            Self::Moss => 15,
+            Self::CanonPowder => 16,
+            Self::Ice => 17,
         }
     }
 }

@@ -51,12 +51,10 @@ void CellMap::draw()
     _window->draw(_frame);
 }
 
-void CellMap::event(sf::Event *event)
+void CellMap::event()
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right))
     {
-        if (event->type == sf::Event::Resized)
-            return;
         float d;
         if (_data->getWidth() / (_window->getSize().x * 0.8) > _data->getHeight() / (float(_window->getSize().y - 120)))
         {
@@ -78,14 +76,18 @@ void CellMap::event(sf::Event *event)
                 sf::IntRect rect(sf::Vector2i(startPos) + sf::Vector2i(x * _rect.getSize().x, y * _rect.getSize().y), sf::Vector2i(_window->mapPixelToCoords(sf::Vector2i(1, 1)) * d));
                 if (sqrt(pow(mousePos.x - (rect.left + rect.width / 2), 2) + pow(mousePos.y - (rect.top + rect.height / 2), 2)) < _tool->size * 5)
                 {
-                    cell c = {x, y, (sf::Mouse::isButtonPressed(sf::Mouse::Left)) ? _tool->color : 0};
+                    cell c = {x, y, (sf::Mouse::isButtonPressed(sf::Mouse::Left)) ? _tool->color : (uint8_t)0};
                     cells.push_back(c);
                 }
             }
         }
         _network->sendCells(cells);
     }
+}
 
+
+void CellMap::event(sf::Event *event)
+{
     if (event->type == sf::Event::MouseWheelScrolled)
     {
         if (event->mouseWheelScroll.delta > 0)

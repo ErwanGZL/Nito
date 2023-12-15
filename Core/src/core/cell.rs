@@ -54,22 +54,86 @@ impl Cell {
                 let first = rng.gen_bool(0.5);
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 3), sim) {
                     actions.push(action);
-                } else if first {
-                    if let Some(action) = self.move_to(origin, Dir::new(Car::SE, 3), sim) {
-                        actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(Car::E, 4), sim) {
-                        actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SE } else { Car::SW }, 3), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SW } else { Car::SE }, 3), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::E } else { Car::W }, 3), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::W } else { Car::E }, 3), sim) {
+                    actions.push(action);
                 }
-                } else {
-                    if let Some(action) = self.move_to(origin, Dir::new(Car::SW, 3), sim) {
-                        actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(Car::W, 4), sim) {
-                        actions.push(action);
+            }
+            Element::Acid => {
+                let first = rng.gen_bool(0.5);
+                if let Some(action) = self.move_to(origin, Dir::new(Car::S, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SE } else { Car::SW }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SW } else { Car::SE }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::E } else { Car::W }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::W } else { Car::E }, 1), sim) {
+                    actions.push(action);
                 }
+            }
+            Element::Lava => {
+                let first = rng.gen_bool(0.5);
+                if let Some(action) = self.move_to(origin, Dir::new(Car::S, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SE } else { Car::SW }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SW } else { Car::SE }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::E } else { Car::W }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::W } else { Car::E }, 1), sim) {
+                    actions.push(action);
                 }
-
+            }
+            Element::Oil => {
+                let first = rng.gen_bool(0.5);
+                if let Some(action) = self.move_to(origin, Dir::new(Car::S, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SE } else { Car::SW }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SW } else { Car::SE }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::E } else { Car::W }, 1), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::W } else { Car::E }, 1), sim) {
+                    actions.push(action);
+                }
             }
             Element::Sand => {
+                if let Some(action) = self.move_to(origin, Dir::new(Car::S, 2), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::SW, 2), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::SE, 2), sim) {
+                    actions.push(action);
+                }
+            }
+            Element::Salt => {
+                if let Some(action) = self.move_to(origin, Dir::new(Car::S, 2), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::SW, 2), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::SE, 2), sim) {
+                    actions.push(action);
+                }
+            }
+            Element::CanonPowder => {
+                if let Some(action) = self.move_to(origin, Dir::new(Car::S, 2), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::SW, 2), sim) {
+                    actions.push(action);
+                } else if let Some(action) = self.move_to(origin, Dir::new(Car::SE, 2), sim) {
+                    actions.push(action);
+                }
+            }
+            Element::Cinder => {
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 2), sim) {
                     actions.push(action);
                 } else if let Some(action) = self.move_to(origin, Dir::new(Car::SW, 2), sim) {
@@ -144,6 +208,9 @@ impl Cell {
             to.set_distance(i);
             if let Some((cell, _)) = simulation.at(&from, to) {
                 if cell.element.solid() {
+                    break;
+                }
+                if cell.element == self.element {
                     break;
                 }
                 if to.factor().y == 1 && self.element.density() > cell.element.density() {

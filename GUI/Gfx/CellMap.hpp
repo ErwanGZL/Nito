@@ -18,6 +18,7 @@ public:
     ~CellMap();
     void draw();
     void event(sf::Event *event);
+    void event();
 
 protected:
 private:

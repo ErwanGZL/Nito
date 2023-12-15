@@ -29,9 +29,10 @@ void Gfx::run()
         while (_window.pollEvent(_event))
         {
             event();
+            _cellMap->event(&_event);
         }
         draw();
-        _cellMap->event(&_event);
+        _cellMap->event();
         _data->unLock();
         usleep(10000);
     }
@@ -39,7 +40,7 @@ void Gfx::run()
 
 void Gfx::draw()
 {
-    _window.clear(sf::Color(255, 255, 245));
+    _window.clear(sf::Color(255, 255, 230));
     _tools->draw();
     _cellMap->draw();
     _window.display();
