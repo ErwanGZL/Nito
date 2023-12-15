@@ -29,23 +29,24 @@ struct cell
     uint8_t value;
 };
 
-class Network {
-    public:
-        Network(Data *data);
-        ~Network();
-        void run();
-        int getMessage();
-        int handleMessages();
-        void sendCells(std::vector<cell> cells);
+class Network
+{
+public:
+    Network(Data *data);
+    ~Network();
+    void run();
+    int getMessage();
+    int handleMessages();
+    void sendCells(std::vector<cell> cells);
 
-    private:
-        int _socket;
-        struct sockaddr_in _addr;
+private:
+    int _socket;
+    struct sockaddr_in _addr;
 
-        Data *_data;
+    Data *_data;
 
-        header _header;
-        // std::vector<cell> _buffer = std::vector<cell>(10000);
-        uint8_t _buffer[100000];
-        fd_set _readfds;
+    header _header;
+    // std::vector<cell> _buffer = std::vector<cell>(10000);
+    uint8_t _buffer[100000];
+    fd_set _readfds;
 };

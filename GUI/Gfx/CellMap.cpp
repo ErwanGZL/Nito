@@ -16,9 +16,12 @@ void CellMap::draw()
 {
     _window->setView(_window->getDefaultView());
     float d;
-    if (_data->getWidth() / (_window->getSize().x * 0.8) > _data->getHeight() / (float(_window->getSize().y - 120))) {
+    if (_data->getWidth() / (_window->getSize().x * 0.8) > _data->getHeight() / (float(_window->getSize().y - 120)))
+    {
         d = (_window->getSize().x * 0.8) / _data->getWidth();
-    } else {
+    }
+    else
+    {
         d = (float(_window->getSize().y - 120)) / _data->getHeight();
     }
     sf::Vector2f size = _window->mapPixelToCoords(sf::Vector2i(_data->getWidth(), _data->getHeight())) * d;
@@ -32,12 +35,14 @@ void CellMap::draw()
     _rect.setSize(_window->mapPixelToCoords(sf::Vector2i(1, 1)) * d);
     _rect.setOrigin(sf::Vector2f(0, 0));
 
-
     sf::Vector2f startPos = pos - origin + sf::Vector2f(0, 10);
 
-    for (uint32_t y = 0; y < _data->getHeight(); y++) {
-        for (uint32_t x = 0; x < _data->getWidth(); x++) {
-            if (_data->getCell(x, y) == 0) continue;
+    for (uint32_t y = 0; y < _data->getHeight(); y++)
+    {
+        for (uint32_t x = 0; x < _data->getWidth(); x++)
+        {
+            if (_data->getCell(x, y) == 0)
+                continue;
             _rect.setPosition(startPos + sf::Vector2f(x * _rect.getSize().x, y * _rect.getSize().y));
             _rect.setFillColor(_colors->at(_data->getCell(x, y)));
             _window->draw(_rect);
@@ -48,12 +53,17 @@ void CellMap::draw()
 
 void CellMap::event(sf::Event *event)
 {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right)) {
-        if (event->type == sf::Event::Resized) return;
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) || sf::Mouse::isButtonPressed(sf::Mouse::Right))
+    {
+        if (event->type == sf::Event::Resized)
+            return;
         float d;
-        if (_data->getWidth() / (_window->getSize().x * 0.8) > _data->getHeight() / (float(_window->getSize().y - 120))) {
+        if (_data->getWidth() / (_window->getSize().x * 0.8) > _data->getHeight() / (float(_window->getSize().y - 120)))
+        {
             d = (_window->getSize().x * 0.8) / _data->getWidth();
-        } else {
+        }
+        else
+        {
             d = (float(_window->getSize().y - 120)) / _data->getHeight();
         }
         sf::Vector2i mousePos = sf::Vector2i(_window->mapPixelToCoords(sf::Mouse::getPosition(*_window)));
@@ -61,10 +71,13 @@ void CellMap::event(sf::Event *event)
         sf::Vector2f origin = _window->mapPixelToCoords(sf::Vector2i(_data->getWidth(), _data->getHeight())) * d / 2.f;
         sf::Vector2f startPos = pos - origin + sf::Vector2f(0, 10);
         std::vector<cell> cells;
-        for (uint16_t y = 0; y < _data->getHeight(); y++) {
-            for (uint16_t x = 0; x < _data->getWidth(); x++) {
+        for (uint16_t y = 0; y < _data->getHeight(); y++)
+        {
+            for (uint16_t x = 0; x < _data->getWidth(); x++)
+            {
                 sf::IntRect rect(sf::Vector2i(startPos) + sf::Vector2i(x * _rect.getSize().x, y * _rect.getSize().y), sf::Vector2i(_window->mapPixelToCoords(sf::Vector2i(1, 1)) * d));
-                if (sqrt(pow(mousePos.x - (rect.left + rect.width / 2), 2) + pow(mousePos.y - (rect.top + rect.height / 2), 2)) < _tool->size * 5) {
+                if (sqrt(pow(mousePos.x - (rect.left + rect.width / 2), 2) + pow(mousePos.y - (rect.top + rect.height / 2), 2)) < _tool->size * 5)
+                {
                     cell c = {x, y, (sf::Mouse::isButtonPressed(sf::Mouse::Left)) ? _tool->color : 0};
                     cells.push_back(c);
                 }
@@ -73,13 +86,19 @@ void CellMap::event(sf::Event *event)
         _network->sendCells(cells);
     }
 
-    if (event->type == sf::Event::MouseWheelScrolled) {
-        if (event->mouseWheelScroll.delta > 0) {
+    if (event->type == sf::Event::MouseWheelScrolled)
+    {
+        if (event->mouseWheelScroll.delta > 0)
+        {
             _tool->size += 1;
-        } else {
+        }
+        else
+        {
             _tool->size -= 1;
         }
-        if (_tool->size < 1) _tool->size = 1;
-        if (_tool->size > 5) _tool->size = 5;
+        if (_tool->size < 1)
+            _tool->size = 1;
+        if (_tool->size > 5)
+            _tool->size = 5;
     }
 }

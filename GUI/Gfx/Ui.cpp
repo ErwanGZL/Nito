@@ -11,6 +11,14 @@ Ui::Ui(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::C
     _selected.setPosition(sf::Vector2f(-100, -100));
     _hover.setFillColor(sf::Color(255, 255, 255, 100));
     _hover.setPosition(sf::Vector2f(-100, -100));
+
+    if (!_font.loadFromFile("Police-Pixeloid.ttf"))
+    {
+        std::cout << "Error loading font" << std::endl;
+    }
+    _textHover.setFont(_font);
+    _textHover.setCharacterSize(20);
+    _textHover.setFillColor(sf::Color::Black);
 }
 
 Ui::~Ui()
@@ -19,7 +27,7 @@ Ui::~Ui()
 
 void Ui::draw()
 {
-    _window->setView( _window->getDefaultView());
+    _window->setView(_window->getDefaultView());
     _window->draw(_frame);
     _window->setView(_window->getDefaultView());
     sf::Vector2f size = _window->mapPixelToCoords(sf::Vector2i(_window->getSize().x * 0.8, 60));
@@ -31,32 +39,39 @@ void Ui::draw()
     _frame.setOrigin(_frame.getOrigin());
     _frame.setPosition(pos);
 
-    _selected.setSize(_window->mapPixelToCoords(sf::Vector2i(60, 60)));
+    _selected.setSize(_window->mapPixelToCoords(sf::Vector2i(37, 60)));
     _selected.setOrigin(_window->mapPixelToCoords(sf::Vector2i(0, 30)));
-    _hover.setSize(_window->mapPixelToCoords(sf::Vector2i(60, 60)));
+    _hover.setSize(_window->mapPixelToCoords(sf::Vector2i(37, 60)));
     _hover.setOrigin(_window->mapPixelToCoords(sf::Vector2i(0, 30)));
 
-    for (uint8_t i = 0; i < _colors->size() - 1; i++) {
-        if (_toolIcon.size() <= i) {
+    for (uint8_t i = 0; i < _colors->size() - 1; i++)
+    {
+        if (_toolIcon.size() <= i)
+        {
             _toolIcon.push_back(sf::RectangleShape());
         }
-        _toolIcon[i].setSize(_window->mapPixelToCoords(sf::Vector2i(60, 60)));
+        _toolIcon[i].setSize(_window->mapPixelToCoords(sf::Vector2i(37, 60)));
         _toolIcon[i].setOrigin(_window->mapPixelToCoords(sf::Vector2i(0, 30)));
         _toolIcon[i].setFillColor(_colors->at(i + 1));
         _toolIcon[i].setPosition(pos + sf::Vector2f(i * _toolIcon[i].getSize().x - origin.x, 0));
         _window->draw(_toolIcon[i]);
     }
     _window->draw(_hover);
+    _window->draw(_textHover);
     _window->draw(_selected);
 }
 
 void Ui::event(sf::Event *event)
 {
-    if (event->type == sf::Event::MouseButtonPressed) {
-        if (event->mouseButton.button == sf::Mouse::Left) {
+    if (event->type == sf::Event::MouseButtonPressed)
+    {
+        if (event->mouseButton.button == sf::Mouse::Left)
+        {
             sf::Vector2f mousePos = _window->mapPixelToCoords(sf::Vector2i(event->mouseButton.x, event->mouseButton.y));
-            for (uint8_t i = 0; i < _colors->size() - 1; i++) {
-                if (_toolIcon[i].getGlobalBounds().contains(mousePos)) {
+            for (uint8_t i = 0; i < _colors->size() - 1; i++)
+            {
+                if (_toolIcon[i].getGlobalBounds().contains(mousePos))
+                {
                     _selected.setPosition(_toolIcon[i].getPosition());
                     _tool->color = i + 1;
                     return;
@@ -64,16 +79,23 @@ void Ui::event(sf::Event *event)
             }
         }
     }
-    if (event->type == sf::Event::MouseMoved) {
+    if (event->type == sf::Event::MouseMoved)
+    {
         sf::Vector2f mousePos = _window->mapPixelToCoords(sf::Vector2i(event->mouseMove.x, event->mouseMove.y));
-        for (uint8_t i = 0; i < _colors->size() - 1; i++) {
-            if (_toolIcon[i].getGlobalBounds().contains(mousePos)) {
+        for (uint8_t i = 0; i < _colors->size() - 1; i++)
+        {
+            if (_toolIcon[i].getGlobalBounds().contains(mousePos))
+            {
                 _hover.setPosition(_toolIcon[i].getPosition());
+                _textHover.setString(_toolName[i]);
+                _textHover.setPosition(_toolIcon[i].getPosition() + sf::Vector2f(0, -_toolIcon[i].getSize().y / 2 - 30));
                 return;
             }
         }
-        if (!_frame.getGlobalBounds().contains(mousePos)) {
+        if (!_frame.getGlobalBounds().contains(mousePos))
+        {
             _hover.setPosition(sf::Vector2f(-100, -100));
+            _textHover.setPosition(sf::Vector2f(-100, -100));
             return;
         }
     }

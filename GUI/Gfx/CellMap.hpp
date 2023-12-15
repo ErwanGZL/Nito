@@ -11,21 +11,22 @@
 #include "tool.hpp"
 #include "Network.hpp"
 
-class CellMap {
-    public:
-        CellMap(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors, Network *network);
-        ~CellMap();
-        void draw();
-        void event(sf::Event *event);
+class CellMap
+{
+public:
+    CellMap(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint8_t, sf::Color> *colors, Network *network);
+    ~CellMap();
+    void draw();
+    void event(sf::Event *event);
 
-    protected:
-    private:
-        Data *_data;
-        sf::RenderWindow *_window;
-        sf::RectangleShape _rect;
-        sf::RectangleShape _frame;
-        tool *_tool;
-        Network *_network;
+protected:
+private:
+    Data *_data;
+    sf::RenderWindow *_window;
+    sf::RectangleShape _rect;
+    sf::RectangleShape _frame;
+    tool *_tool;
+    Network *_network;
 
-        std::map<uint8_t, sf::Color> *_colors;
+    std::map<uint8_t, sf::Color> *_colors;
 };

@@ -20,12 +20,14 @@ Gfx::~Gfx()
     delete _data;
 }
 
-void Gfx::run ()
+void Gfx::run()
 {
     _thread = std::thread(threadNet, _network);
-    while (_data->isRunning()) {
+    while (_data->isRunning())
+    {
         _data->lock();
-        while (_window.pollEvent(_event)) {
+        while (_window.pollEvent(_event))
+        {
             event();
         }
         draw();
@@ -37,7 +39,7 @@ void Gfx::run ()
 
 void Gfx::draw()
 {
-    _window.clear(sf::Color(255, 255, 227));
+    _window.clear(sf::Color(255, 255, 245));
     _tools->draw();
     _cellMap->draw();
     _window.display();
@@ -45,7 +47,8 @@ void Gfx::draw()
 
 void Gfx::event()
 {
-    if (_event.type == sf::Event::Closed) {
+    if (_event.type == sf::Event::Closed)
+    {
         _data->setRunning(false);
         _window.close();
     }
@@ -55,9 +58,12 @@ void Gfx::event()
 void *threadNet(void *arg)
 {
     Network *network = (Network *)arg;
-    try {
+    try
+    {
         network->run();
-    } catch (std::exception &e) {
+    }
+    catch (std::exception &e)
+    {
         std::cerr << e.what() << std::endl;
         // data->setRunning(false);
     }
