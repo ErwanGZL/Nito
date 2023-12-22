@@ -191,6 +191,9 @@ impl Cell {
             Element::Ember => {
                 actions.push(Action::Burn(origin));
             }
+            Element::Moss => {
+                actions.push(Action::Grow(origin));
+            }
             _ => {}
         }
         actions

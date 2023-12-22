@@ -132,11 +132,21 @@ impl Simulation {
                         }
                         self.world[neighbour.1.y][neighbour.1.x].set_update();
                     }
-                    if source == Element::Ember
-                        && neighbour.0.element() == Element::Water
-                    {
+                    if source == Element::Ember && neighbour.0.element() == Element::Water {
                         self.world[position.y][position.x] = Cell::new(Element::Coal);
                         self.world[position.y][position.x].set_update();
+                    }
+                }
+            }
+            Action::Grow(position) => {
+                let mut rng = rand::thread_rng();
+                for neighbour in self.get_neighbours(&position) {
+                    if rng.gen_bool(0.005) {
+                        if neighbour.0.element() == Element::Water {
+                            self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Moss);
+                            self.world[neighbour.1.y][neighbour.1.x].set_update();
+
+                        }
                     }
                 }
             }

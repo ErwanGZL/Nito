@@ -6,4 +6,5 @@ pub enum Action {
     Burn(Vector2D<usize>),
     Eat(Vector2D<usize>, Element),
     Die(Vector2D<usize>, Element),
+    Grow(Vector2D<usize>),
 }
