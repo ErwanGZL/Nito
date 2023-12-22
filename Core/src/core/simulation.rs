@@ -136,6 +136,26 @@ impl Simulation {
                         self.world[position.y][position.x] = Cell::new(Element::Coal);
                         self.world[position.y][position.x].set_update();
                     }
+                    if source == Element::Lava {
+                        if neighbour.0.element() == Element::Water {
+                            self.world[position.y][position.x] = Cell::new(Element::Stone);
+                            self.world[position.y][position.x].set_update();
+                            self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Stone);
+                            self.world[neighbour.1.y][neighbour.1.x].set_update();
+                        }
+                        if neighbour.0.element() == Element::Ice {
+                            self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Water);
+                            self.world[neighbour.1.y][neighbour.1.x].set_update();
+                        }
+                        if neighbour.0.element() == Element::Air && rng.gen_bool(0.01) {
+                            if rng.gen_bool(0.9) {
+                                self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Smoke);
+                            } else {
+                                self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Fire);
+                            }
+                            self.world[neighbour.1.y][neighbour.1.x].set_update();
+                        }
+                    }
                 }
             }
             Action::Grow(position) => {

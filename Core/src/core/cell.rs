@@ -79,6 +79,7 @@ impl Cell {
                 }
             }
             Element::Lava => {
+                actions.push(Action::Burn(origin));
                 let first = rng.gen_bool(0.5);
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 1), sim) {
                     actions.push(action);
