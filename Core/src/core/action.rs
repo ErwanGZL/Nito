@@ -8,4 +8,5 @@ pub enum Action {
     Die(Vector2D<usize>, Element),
     Grow(Vector2D<usize>),
     Disolve(Vector2D<usize>),
+    Liquidize(Vector2D<usize>),
 }

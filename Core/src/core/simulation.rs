@@ -181,6 +181,17 @@ impl Simulation {
                     }
                 }
             }
+            Action::Liquidize(position) => {
+                let mut rng = rand::thread_rng();
+                for neighbour in self.get_neighbours(&position) {
+                    if rng.gen_bool(0.1) {
+                        if neighbour.0.element() == Element::Fire || neighbour.0.element() == Element::Ember || neighbour.0.element() == Element::Smoke {
+                            self.world[position.y][position.x] = Cell::new(Element::Water);
+                            self.world[position.y][position.x].set_update();
+                        }
+                    }
+                }
+            }
             _ => {}
         }
     }

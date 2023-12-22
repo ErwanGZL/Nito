@@ -196,6 +196,9 @@ impl Cell {
             Element::Moss => {
                 actions.push(Action::Grow(origin));
             }
+            Element::Ice => {
+                actions.push(Action::Liquidize(origin));
+            }
             _ => {}
         }
         actions
