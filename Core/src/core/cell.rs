@@ -123,6 +123,7 @@ impl Cell {
                 } else if let Some(action) = self.move_to(origin, Dir::new(Car::SE, 2), sim) {
                     actions.push(action);
                 }
+                actions.push(Action::Disolve(origin));
             }
             Element::CanonPowder => {
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 2), sim) {
@@ -262,9 +263,7 @@ impl Cell {
                     Element::Ember => {
                         self.life = Some(life - 1);
                         if rand::thread_rng().gen_bool(0.5) {
-                            transform = Element::Smoke;
-                        } else {
-                            transform = Element::Fire;
+                            transform = Element::Cinder;
                         }
                     }
                     _ => {}
