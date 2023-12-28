@@ -39,7 +39,7 @@ impl Cell {
             element,
             velocity,
             life,
-            variant,
+            variant: variant,
             updated: false,
         }
     }
@@ -239,6 +239,10 @@ impl Cell {
 
     pub fn element(&self) -> Element {
         self.element
+    }
+
+    pub fn variant(&self) -> u8 {
+        self.variant
     }
 
     pub fn set_update(&mut self) {

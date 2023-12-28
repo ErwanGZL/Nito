@@ -6,6 +6,7 @@ CellMap::CellMap(sf::RenderWindow *window, Data *data, tool *Tool, std::map<uint
     _frame.setOutlineColor(sf::Color::Black);
     _frame.setOutlineThickness(2);
     _rect.setFillColor(sf::Color::Transparent);
+    _clock.restart();
 }
 
 CellMap::~CellMap()
@@ -41,14 +42,38 @@ void CellMap::draw()
     {
         for (uint32_t x = 0; x < _data->getWidth(); x++)
         {
-            if (_data->getCell(x, y) == 0)
+            if (_data->getCell(x, y).value == 0)
                 continue;
             _rect.setPosition(startPos + sf::Vector2f(x * _rect.getSize().x, y * _rect.getSize().y));
-            _rect.setFillColor(_colors->at(_data->getCell(x, y)));
+            _rect.setFillColor(getColorFromVariant(_data->getCell(x, y)));
             _window->draw(_rect);
         }
     }
     _window->draw(_frame);
+}
+
+sf::Color CellMap::getColorFromVariant(cell_map cell)
+{
+
+    switch (cell.value)
+    {
+    case 1:
+        sf::Color color = _colors->at(cell.value);
+        float variant = cell.variant * 5 / 255;
+        float d = abs(sin(_clock.getElapsedTime().asSeconds() + variant)) * 0.2 + 0.8;
+        color.r = color.r * d;
+        color.g = color.g * d;
+        color.b = color.b * d;
+        color.a = color.a * d;
+        return color;
+    }
+    sf::Color color = _colors->at(cell.value);
+    float variant = cell.variant * 5 / 255;
+    float d = ((variant / 5.f) * 0.2 + 0.8);
+    color.r = color.r * d;
+    color.g = color.g * d;
+    color.b = color.b * d;
+    return color;
 }
 
 void CellMap::event()

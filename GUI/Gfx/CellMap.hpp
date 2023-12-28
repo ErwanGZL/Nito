@@ -20,6 +20,8 @@ public:
     void event(sf::Event *event);
     void event();
 
+    sf::Color getColorFromVariant(cell_map cell);
+
 protected:
 private:
     Data *_data;
@@ -28,6 +30,7 @@ private:
     sf::RectangleShape _frame;
     tool *_tool;
     Network *_network;
+    sf::Clock _clock;
 
     std::map<uint8_t, sf::Color> *_colors;
 };

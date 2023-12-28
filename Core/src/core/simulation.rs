@@ -63,12 +63,13 @@ impl Simulation {
                         body.extend((x as u16).to_le_bytes());
                         body.extend((y as u16).to_le_bytes());
                         body.push(cell.element().to_byte());
+                        body.extend((cell.variant() as u8).to_le_bytes());
                         self.world[y][x].reset_update();
                     }
                 }
             }
         }
-        data.extend(((body.len() / 5) as u32).to_le_bytes());
+        data.extend(((body.len() / 6) as u32).to_le_bytes());
         data.extend(body);
         data
     }

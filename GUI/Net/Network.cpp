@@ -44,13 +44,14 @@ int Network::getMessage()
 
     if (_header.size == 0)
         return 0;
-    std::cout << "Received " << _header.size << " cells" << std::endl;
+    // std::cout << "Received " << _header.size << " cells" << std::endl;
 
     std::memset(_buffer, 0, sizeof(_buffer));
-    size = read(_socket, _buffer, _header.size * 5);
-    while (size != _header.size * 5)
+    size = read(_socket, _buffer, _header.size * 6);
+    // std::cout << "Received " << size << " bytes" << std::endl;
+    while (size != _header.size * 6)
     {
-        size += read(_socket, _buffer + size, _header.size * 5 - size);
+        size += read(_socket, _buffer + size, _header.size * 6 - size);
     }
     if (size == -1 || size == 0)
     {
@@ -82,10 +83,11 @@ int Network::handleMessages()
     _data->setWidthHeight(_header.x, _header.y);
     for (int i = 0; i < _header.size; i++)
     {
-        uint16_t x = _buffer[i * 5 + 1] << 8 | _buffer[i * 5];
-        uint16_t y = _buffer[i * 5 + 3] << 8 | _buffer[i * 5 + 2];
-        uint8_t value = _buffer[i * 5 + 4];
-        _data->setCell(x, y, value);
+        uint16_t x = _buffer[i * 6 + 1] << 8 | _buffer[i * 6];
+        uint16_t y = _buffer[i * 6 + 3] << 8 | _buffer[i * 6 + 2];
+        uint8_t value = _buffer[i * 6 + 4];
+        uint8_t variant = _buffer[i * 6 + 5];
+        _data->setCell(x, y, value, variant);
     }
     _data->unLock();
     return 0;
