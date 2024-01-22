@@ -165,6 +165,12 @@ impl Simulation {
                             self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Smoke);
                         }
                     }
+                    if source == Element::Air && neighbour.0.element() == Element::Fire {
+                        if rng.gen_bool(0.5) {
+                            self.world[position.y][position.x] = Cell::new(Element::Fire);
+                            return;
+                        }
+                    }
                 }
             }
             Action::Grow(position) => {

@@ -4,7 +4,7 @@ use rand::{thread_rng, Rng};
 
 use crate::direction::Cardinal;
 use crate::element::Physics;
-use crate::{Action, Simulation, Vector2D};
+use crate::{simulation, Action, Simulation, Vector2D};
 use crate::{Direction, Element};
 
 #[derive(Debug, Clone, Copy)]
@@ -145,6 +145,12 @@ impl Cell {
                 }
             }
             Element::Oil => {
+                if let Some((cell, position)) = sim.at(&origin, Dir::new(Car::N, 1)) {
+                    if cell.element() == Element::Air {
+                        actions.push(Action::Burn(position))
+                    }
+                }
+
                 let first = rng.gen_bool(0.5);
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 1), sim) {
                     actions.push(action);

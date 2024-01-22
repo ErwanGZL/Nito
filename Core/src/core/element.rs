@@ -68,7 +68,7 @@ impl Physics for Element {
             Self::Salt => 0.0,
             Self::Cinder => 0.0,
             Self::Lava => 0.0,
-            Self::Oil => 0.1,
+            Self::Oil => 0.01,
             Self::Moss => 0.1,
             Self::CanonPowder => 1.0,
             Self::Ice => 0.0,
