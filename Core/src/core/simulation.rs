@@ -104,6 +104,9 @@ impl Simulation {
                     from = destination;
                 }
             }
+            Action::Eat(position, replacement) => {
+                self.world[position.y][position.x].element = replacement;
+            }
             Action::Burn(position) => {
                 let source = self.world[position.y][position.x].element();
                 let mut rng = rand::thread_rng();
@@ -152,6 +155,14 @@ impl Simulation {
                                 self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Fire);
                             }
                             self.world[neighbour.1.y][neighbour.1.x].set_update();
+                        }
+                    }
+                    if source == Element::Acid && neighbour.0.element() == Element::Air {
+                        if rng.gen_bool(0.01) {
+                            self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Gas);
+                        }
+                        if rng.gen_bool(0.01) {
+                            self.world[neighbour.1.y][neighbour.1.x] = Cell::new(Element::Smoke);
                         }
                     }
                 }

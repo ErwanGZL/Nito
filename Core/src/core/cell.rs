@@ -1,6 +1,6 @@
 use std::fmt::{Display, Formatter};
 
-use rand::Rng;
+use rand::{thread_rng, Rng};
 
 use crate::direction::Cardinal;
 use crate::element::Physics;
@@ -33,6 +33,7 @@ impl Cell {
             Element::Coal => life = Some(rng.gen_range(500..=650)),
             Element::Fire => life = Some(5),
             Element::Smoke => life = Some(20),
+            Element::Acid => life = Some(rng.gen_range(200..=2000)),
             _ => {}
         }
         Self {
@@ -109,6 +110,8 @@ impl Cell {
                 ) {
                     actions.push(action);
                 }
+                actions.extend(self.eat_neighbour(origin, sim));
+                actions.push(Action::Burn(origin));
             }
             Element::Lava => {
                 actions.push(Action::Burn(origin));
@@ -264,7 +267,7 @@ impl Cell {
                 actions.push(Action::Liquidize(origin));
             }
             Element::Gas => {
-                let distance = rng.gen_range(1..=3);
+                let distance = rng.gen_range(1..=2);
                 let direction = Dir::new_rng(distance);
                 if let Some(action) = self.move_to(origin, direction, sim) {
                     actions.push(action);
@@ -312,6 +315,21 @@ impl Cell {
         destination
     }
 
+    fn eat_neighbour(&self, from: Vector2D<usize>, simulation: &Simulation) -> Vec<Action> {
+        let mut rng = thread_rng();
+        let mut actions: Vec<Action> = vec![];
+        for (cell, at) in simulation.get_neighbours(&from) {
+            if cell.element == Element::Air || cell.element == Element::Acid {
+                continue;
+            }
+            let eat = rng.gen_bool(0.2 * (1.0 / (cell.element.density() * 3.0)));
+            if eat {
+                actions.push(Action::Eat(at, Element::Air));
+            }
+        }
+        actions
+    }
+
     pub fn element(&self) -> Element {
         self.element
     }
@@ -348,6 +366,9 @@ impl Cell {
                         if rand::thread_rng().gen_bool(0.5) {
                             transform = Element::Cinder;
                         }
+                    }
+                    Element::Acid => {
+                        self.life = Some(life - 1);
                     }
                     _ => {}
                 }

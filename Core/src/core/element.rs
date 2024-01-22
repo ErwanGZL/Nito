@@ -36,7 +36,7 @@ impl Physics for Element {
             Self::Water => 2.0,
             Self::Sand => 3.0,
             Self::Wood => 10.0,
-            Self::Fire => 0.0,
+            Self::Fire => 0.1,
             Self::Smoke => 0.5,
             Self::Acid => 1.5,
             Self::Ember => 4.0,
