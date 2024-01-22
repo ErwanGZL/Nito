@@ -16,7 +16,7 @@ pub fn simulation_logic(
     loop {
         {
             let mut dump = dump.lock().unwrap();
-            *dump = simulation.lock().unwrap().dump();
+            *dump = simulation.lock().unwrap().dump(false);
             sender.send(true).unwrap();
         }
 

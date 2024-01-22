@@ -49,7 +49,7 @@ impl Simulation {
             }
         }
     }
-    pub fn dump(&mut self) -> Vec<u8> {
+    pub fn dump(&mut self, first: bool) -> Vec<u8> {
         let mut data: Vec<u8> = vec![];
         let mut body: Vec<u8> = vec![];
         data.extend((self.dimensions.x as u16).to_le_bytes());
@@ -57,15 +57,12 @@ impl Simulation {
         let buffer = self.world.clone();
         for (y, row) in buffer.iter().enumerate() {
             for (x, cell) in row.iter().enumerate() {
-                match cell.updated() {
-                    false => {}
-                    _other => {
-                        body.extend((x as u16).to_le_bytes());
-                        body.extend((y as u16).to_le_bytes());
-                        body.push(cell.element().to_byte());
-                        body.extend((cell.variant() as u8).to_le_bytes());
-                        self.world[y][x].reset_update();
-                    }
+                if cell.updated() || (first && cell.element() != Element::Air) {
+                    body.extend((x as u16).to_le_bytes());
+                    body.extend((y as u16).to_le_bytes());
+                    body.push(cell.element().to_byte());
+                    body.extend((cell.variant() as u8).to_le_bytes());
+                    self.world[y][x].reset_update();
                 }
             }
         }

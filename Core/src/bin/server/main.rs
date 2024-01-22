@@ -1,3 +1,4 @@
+use std::io::Write;
 #[allow(dead_code, unused)]
 use std::net::TcpListener;
 use std::sync::mpsc::channel;
@@ -67,11 +68,15 @@ fn main() -> std::io::Result<()> {
                 println!("Received new connection");
                 // Add client to clients vector
                 let mut clients = clients.lock().unwrap();
-                clients.push(stream.try_clone().expect("Failed to clone connection"));
+                let mut client = stream.try_clone().expect("Failed to clone connection");
 
                 // On new connection spawn a thread
                 let clone_stream = stream.try_clone().expect("Failed to clone connection");
                 let sim_clone = Arc::clone(&simulation);
+                let mut dump = dump.lock().unwrap();
+                *dump = sim_clone.lock().unwrap().dump(true);
+                client.write(dump.as_slice()).unwrap();
+                clients.push(client);
                 let handle = thread::Builder::new()
                     .name(format!("client#{}", clients.len()).to_string())
                     .spawn(move || {

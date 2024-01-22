@@ -40,7 +40,7 @@ void Gfx::run()
 
 void Gfx::draw()
 {
-    _window.clear(sf::Color(255, 255, 230));
+    _window.clear(sf::Color(255, 255, 240));
     _tools->draw();
     _cellMap->draw();
     _window.display();
