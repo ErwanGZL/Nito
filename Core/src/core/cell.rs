@@ -39,7 +39,7 @@ impl Cell {
             element,
             velocity,
             life,
-            variant: variant,
+            variant,
             updated: false,
         }
     }
@@ -54,13 +54,29 @@ impl Cell {
                 let first = rng.gen_bool(0.5);
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 3), sim) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SE } else { Car::SW }, 3), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::SE } else { Car::SW }, 3),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SW } else { Car::SE }, 3), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::SW } else { Car::SE }, 3),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::E } else { Car::W }, 3), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::E } else { Car::W }, 3),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::W } else { Car::E }, 3), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::W } else { Car::E }, 3),
+                    sim,
+                ) {
                     actions.push(action);
                 }
             }
@@ -68,13 +84,29 @@ impl Cell {
                 let first = rng.gen_bool(0.5);
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 1), sim) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SE } else { Car::SW }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::SE } else { Car::SW }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SW } else { Car::SE }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::SW } else { Car::SE }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::E } else { Car::W }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::E } else { Car::W }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::W } else { Car::E }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::W } else { Car::E }, 1),
+                    sim,
+                ) {
                     actions.push(action);
                 }
             }
@@ -83,13 +115,29 @@ impl Cell {
                 let first = rng.gen_bool(0.5);
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 1), sim) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SE } else { Car::SW }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::SE } else { Car::SW }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SW } else { Car::SE }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::SW } else { Car::SE }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::E } else { Car::W }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::E } else { Car::W }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::W } else { Car::E }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::W } else { Car::E }, 1),
+                    sim,
+                ) {
                     actions.push(action);
                 }
             }
@@ -97,13 +145,29 @@ impl Cell {
                 let first = rng.gen_bool(0.5);
                 if let Some(action) = self.move_to(origin, Dir::new(Car::S, 1), sim) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SE } else { Car::SW }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::SE } else { Car::SW }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::SW } else { Car::SE }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::SW } else { Car::SE }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::E } else { Car::W }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::E } else { Car::W }, 1),
+                    sim,
+                ) {
                     actions.push(action);
-                } else if let Some(action) = self.move_to(origin, Dir::new(if first { Car::W } else { Car::E }, 1), sim) {
+                } else if let Some(action) = self.move_to(
+                    origin,
+                    Dir::new(if first { Car::W } else { Car::E }, 1),
+                    sim,
+                ) {
                     actions.push(action);
                 }
             }
@@ -199,6 +263,13 @@ impl Cell {
             Element::Ice => {
                 actions.push(Action::Liquidize(origin));
             }
+            Element::Gas => {
+                let distance = rng.gen_range(1..=3);
+                let direction = Dir::new_rng(distance);
+                if let Some(action) = self.move_to(origin, direction, sim) {
+                    actions.push(action);
+                }
+            }
             _ => {}
         }
         actions
@@ -220,6 +291,10 @@ impl Cell {
                 }
                 if cell.element == self.element {
                     break;
+                }
+                if self.element == Element::Gas && cell.element == Element::Air {
+                    destination = Some(Action::Move(from, to));
+                    continue;
                 }
                 if to.factor().y == 1 && self.element.density() > cell.element.density() {
                     destination = Some(Action::Move(from, to));

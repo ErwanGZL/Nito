@@ -1,3 +1,5 @@
+use rand::{thread_rng, Rng};
+
 use crate::Vector2D;
 
 #[derive(Clone, Copy, Debug)]
@@ -36,6 +38,25 @@ impl Cardinal {
 }
 
 impl Direction {
+    pub fn new(cardinal: Cardinal, distance: u32) -> Self {
+        Self { cardinal, distance }
+    }
+
+    pub fn new_rng(distance: u32) -> Self {
+        let mut rng = thread_rng();
+        let cardinal = match rng.gen_range(0..8) {
+            1 => Cardinal::NW,
+            2 => Cardinal::W,
+            3 => Cardinal::SW,
+            4 => Cardinal::S,
+            5 => Cardinal::SE,
+            6 => Cardinal::E,
+            7 => Cardinal::NE,
+            _ => Cardinal::N,
+        };
+        Self { cardinal, distance }
+    }
+
     pub fn factor(&self) -> Vector2D<i8> {
         match self.cardinal {
             Cardinal::N => Vector2D { x: 0, y: -1 },
@@ -47,10 +68,6 @@ impl Direction {
             Cardinal::W => Vector2D { x: -1, y: 0 },
             Cardinal::NW => Vector2D { x: -1, y: -1 },
         }
-    }
-
-    pub fn new(cardinal: Cardinal, distance: u32) -> Self {
-        Self { cardinal, distance }
     }
 
     pub fn distance(&self) -> u32 {

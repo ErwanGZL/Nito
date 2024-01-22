@@ -40,7 +40,7 @@ impl Physics for Element {
             Self::Smoke => 0.5,
             Self::Acid => 1.5,
             Self::Ember => 4.0,
-            Self::Gas => 0.5,
+            Self::Gas => 1.0,
             Self::Stone => 20.0,
             Self::Coal => 10.0,
             Self::Salt => 2.2,
