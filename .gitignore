@@ -1,2 +1,3 @@
 .idea
 .vscode
+Core/src/core/.*.rustfmt
